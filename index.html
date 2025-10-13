@@ -9,37 +9,40 @@ body {
   font-family: "Segoe UI", sans-serif;
   background: linear-gradient(135deg, #0a0f1f, #1a2740);
   color: #fff;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
-  backdrop-filter: blur(10px);
+  margin: 0;
+  padding: 0;
 }
 
-.glass {
+.form-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.hiq-form {
+  flex: 2;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 30px;
-  width: 90%;
-  max-width: 600px;
-  margin-bottom: 20px;
 }
 
-h1 {
+.section-block h3 {
   text-align: center;
-  color: #80e0ff;
   margin-bottom: 10px;
 }
 
-h3.section-title {
-  text-align: center;
-  margin-bottom: 10px;
+.checkout-box {
+  flex: 1;
+  position: sticky;
+  top: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 20px;
+  border-radius: 12px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
 }
 
 label {
@@ -57,6 +60,16 @@ input, select {
   margin-bottom: 10px;
 }
 
+.device-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.device-row select {
+  flex: 1;
+}
+
 button {
   width: 100%;
   padding: 12px;
@@ -72,148 +85,196 @@ button {
 button:hover {
   background-color: #00b3ff;
 }
-
-#quotePreview {
-  margin-top: 20px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-}
-
-.section-block {
-  margin-top: 20px;
-  padding: 15px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.08);
-}
 </style>
 </head>
 <body>
-<div class="glass">
-<h1>HiQ Test Form</h1>
-<form id="hiqForm">
-<label for="name">Name</label>
-<input type="text" id="name" name="name" required />
 
-<label for="email">Email</label>
-<input type="email" id="email" name="email" required />
+<div class="form-container">
+  <div class="hiq-form">
+    <h1 style="text-align:center; color:#80e0ff;">HiQ Test Form</h1>
 
-<label for="contact">Contact</label>
-<input type="text" id="contact" name="contact" placeholder="Optional" />
+    <form id="hiqForm">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required />
 
-<label for="package">Package</label>
-<select id="package" name="package">
-<option value="Essential">Essential</option>
-</select>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required />
 
-<div class="section-block">
-<h3 class="section-title">HiQ Security Essentials</h3>
+      <label for="contact">Contact</label>
+      <input type="text" id="contact" name="contact" placeholder="Optional" />
 
-<label>Security Device 1</label>
-<select id="securityEssential1">
-<option value="">Select Option</option>
-<option>Option 1</option>
-<option>Option 2</option>
-<option>Option 3</option>
-</select>
-<select id="securityQty1">
-<option value="">Select Quantity</option>
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5</option>
-<option value="custom">Custom</option>
-</select>
+      <label for="package">Package</label>
+      <select id="package" name="package">
+        <option value="Essential">Essential</option>
+      </select>
 
-<label>Security Device 2</label>
-<select id="securityEssential2">
-<option value="">Select Option</option>
-<option>Option 1</option>
-<option>Option 2</option>
-<option>Option 3</option>
-</select>
-<select id="securityQty2">
-<option value="">Select Quantity</option>
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5</option>
-<option value="custom">Custom</option>
-</select>
-</div>
+      <div class="section-block">
+        <h3>HiQ Security Essentials</h3>
+        <div class="device-row">
+          <select id="securityEssential1"><option value="">Select Device</option></select>
+          <select id="securityDesc1"><option value="">Select Description</option></select>
+          <select id="securityQty1">
+            <option value="">Select Quantity</option>
+            <option value="1">1</option><option value="2">2</option>
+            <option value="3">3</option><option value="4">4</option>
+            <option value="5">5</option><option value="custom">Custom</option>
+          </select>
+        </div>
+        <div class="device-row">
+          <select id="securityEssential2"><option value="">Select Device</option></select>
+          <select id="securityDesc2"><option value="">Select Description</option></select>
+          <select id="securityQty2">
+            <option value="">Select Quantity</option>
+            <option value="1">1</option><option value="2">2</option>
+            <option value="3">3</option><option value="4">4</option>
+            <option value="5">5</option><option value="custom">Custom</option>
+          </select>
+        </div>
+      </div>
 
-<div class="section-block">
-<h3 class="section-title">HiQ Power Control Essentials</h3>
+      <div class="section-block">
+        <h3>HiQ Power Control Essentials</h3>
+        <div class="device-row">
+          <select id="powerEssential1"><option value="">Select Device</option></select>
+          <select id="powerDesc1"><option value="">Select Description</option></select>
+          <select id="powerQty1">
+            <option value="">Select Quantity</option>
+            <option value="1">1</option><option value="2">2</option>
+            <option value="3">3</option><option value="4">4</option>
+            <option value="5">5</option><option value="custom">Custom</option>
+          </select>
+        </div>
+        <div class="device-row">
+          <select id="powerEssential2"><option value="">Select Device</option></select>
+          <select id="powerDesc2"><option value="">Select Description</option></select>
+          <select id="powerQty2">
+            <option value="">Select Quantity</option>
+            <option value="1">1</option><option value="2">2</option>
+            <option value="3">3</option><option value="4">4</option>
+            <option value="5">5</option><option value="custom">Custom</option>
+          </select>
+        </div>
+        <div class="device-row">
+          <select id="powerEssential3"><option value="">Select Device</option></select>
+          <select id="powerDesc3"><option value="">Select Description</option></select>
+          <select id="powerQty3">
+            <option value="">Select Quantity</option>
+            <option value="1">1</option><option value="2">2</option>
+            <option value="3">3</option><option value="4">4</option>
+            <option value="5">5</option><option value="custom">Custom</option>
+          </select>
+        </div>
+      </div>
 
-<label>Power Device 1</label>
-<select id="powerEssential1">
-<option value="">Select Option</option>
-<option>Option 1</option>
-<option>Option 2</option>
-<option>Option 3</option>
-</select>
-<select id="powerQty1">
-<option value="">Select Quantity</option>
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5</option>
-<option value="custom">Custom</option>
-</select>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
 
-<label>Power Device 2</label>
-<select id="powerEssential2">
-<option value="">Select Option</option>
-<option>Option 1</option>
-<option>Option 2</option>
-<option>Option 3</option>
-</select>
-<select id="powerQty2">
-<option value="">Select Quantity</option>
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5</option>
-<option value="custom">Custom</option>
-</select>
+  <div class="checkout-box" id="quotePreview">
+    <h3>Included in HiQ Essential</h3>
+    <p>HiQ Central Hub</p>
+    <p>Internet Router</p>
+    <p>Echo Dot Voice Assistant</p>
+    <p>HarmoniQ LIV App</p>
+    <p>Trial Access to QARA (AI assistant)</p>
+    <p>Installation – Free</p>
 
-<label>Power Device 3</label>
-<select id="powerEssential3">
-<option value="">Select Option</option>
-<option>Option 1</option>
-<option>Option 2</option>
-<option>Option 3</option>
-</select>
-<select id="powerQty3">
-<option value="">Select Quantity</option>
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5</option>
-<option value="custom">Custom</option>
-</select>
-</div>
+    <h3>Selected Devices</h3>
+    <div id="liveSummary"></div>
 
-<button type="submit">Submit</button>
-</form>
-
-<div id="quotePreview">
-<h3>Included in HiQ Essential</h3>
-<p>HiQ Central Hub </p>
-<p>Internet Router </p>
-<p>Echo Dot Voice Assistant </p>
-<p>HarmoniQ LIV App </p>
-<p>Trial Access to QARA (AI assistant)</p>
-<p>Installation – Free </p>
-</div>
+    <h3>AI Result</h3>
+    <div id="aiResult"></div>
+  </div>
 </div>
 
 <script>
+// Replace with your actual catalog JSON URL
+const catalogURL = "https://example.com/catalog.json";
+// Replace with your n8n webhook URL
+const webhookURL = "https://macapellan.app.n8n.cloud/webhook-test/ef1bcf20-e87f-4905-9921-968d45d4e639";
+
+let devices = [];
+const allDeviceSelects = [
+  { deviceId: "securityEssential1", descId: "securityDesc1", qtyId: "securityQty1", category: "Security" },
+  { deviceId: "securityEssential2", descId: "securityDesc2", qtyId: "securityQty2", category: "Security" },
+  { deviceId: "powerEssential1", descId: "powerDesc1", qtyId: "powerQty1", category: "Power Control" },
+  { deviceId: "powerEssential2", descId: "powerDesc2", qtyId: "powerQty2", category: "Power Control" },
+  { deviceId: "powerEssential3", descId: "powerDesc3", qtyId: "powerQty3", category: "Power Control" }
+];
+
+async function loadDevices() {
+  const res = await fetch(catalogURL);
+  devices = await res.json();
+  populateAllDevices();
+}
+
+function populateAllDevices() {
+  allDeviceSelects.forEach(sel => {
+    const select = document.getElementById(sel.deviceId);
+    select.innerHTML = `<option value="">Select Device</option>`;
+    const filtered = devices.filter(d => d.Package === "Essential" && d["Subcategory 1 (FUNCTION)"] === sel.category);
+    const genericDevices = [...new Set(filtered.map(d => d["Generic Device Name"]))];
+    genericDevices.forEach(d => {
+      const option = document.createElement("option");
+      option.value = d;
+      option.textContent = d;
+      select.appendChild(option);
+    });
+    document.getElementById(sel.descId).innerHTML = `<option value="">Select Description</option>`;
+  });
+  updateSummary();
+}
+
+function populateDescription(deviceSelectId, descSelectId, category) {
+  const deviceSelect = document.getElementById(deviceSelectId);
+  const descSelect = document.getElementById(descSelectId);
+  const selectedDevice = deviceSelect.value;
+  const filtered = devices.filter(d =>
+    d.Package === "Essential" &&
+    d["Subcategory 1 (FUNCTION)"] === category &&
+    d["Generic Device Name"] === selectedDevice
+  );
+  descSelect.innerHTML = `<option value="">Select Description</option>`;
+  filtered.forEach(d => {
+    const option = document.createElement("option");
+    option.value = d["Device Name"];
+    option.textContent = d["Device Name"];
+    descSelect.appendChild(option);
+  });
+}
+
+function updateSummary() {
+  const summaryDiv = document.getElementById("liveSummary");
+  let html = "";
+  allDeviceSelects.forEach(sel => {
+    const device = document.getElementById(sel.deviceId).value;
+    const desc = document.getElementById(sel.descId).value;
+    const qty = document.getElementById(sel.qtyId).value;
+    if(device || desc || qty) {
+      html += `<p>${device ? device : "-"} | ${desc ? desc : "-"} | Qty: ${qty ? qty : "-"}</p>`;
+    }
+  });
+  summaryDiv.innerHTML = html || "<p>No devices selected</p>";
+}
+
+// Event listeners for cascading descriptions and live summary
+allDeviceSelects.forEach(sel => {
+  const deviceEl = document.getElementById(sel.deviceId);
+  const descEl = document.getElementById(sel.descId);
+  const qtyEl = document.getElementById(sel.qtyId);
+
+  deviceEl.addEventListener("change", () => {
+    populateDescription(sel.deviceId, sel.descId, sel.category);
+    updateSummary();
+  });
+  descEl.addEventListener("change", updateSummary);
+  qtyEl.addEventListener("change", updateSummary);
+});
+
+// Load devices on page load
+loadDevices();
+
+// Form submission
 document.getElementById("hiqForm").addEventListener("submit", async function(e) {
   e.preventDefault();
 
@@ -222,56 +283,28 @@ document.getElementById("hiqForm").addEventListener("submit", async function(e) 
     email: document.getElementById("email").value,
     contact: document.getElementById("contact").value,
     package: document.getElementById("package").value,
-
-    securityEssential1: document.getElementById("securityEssential1").value,
-    securityQty1: document.getElementById("securityQty1").value,
-    securityEssential2: document.getElementById("securityEssential2").value,
-    securityQty2: document.getElementById("securityQty2").value,
-
-    powerEssential1: document.getElementById("powerEssential1").value,
-    powerQty1: document.getElementById("powerQty1").value,
-    powerEssential2: document.getElementById("powerEssential2").value,
-    powerQty2: document.getElementById("powerQty2").value,
-    powerEssential3: document.getElementById("powerEssential3").value,
-    powerQty3: document.getElementById("powerQty3").value
+    devices: allDeviceSelects.map(sel => ({
+      device: document.getElementById(sel.deviceId).value,
+      description: document.getElementById(sel.descId).value,
+      quantity: document.getElementById(sel.qtyId).value
+    }))
   };
 
-  const resultDiv = document.getElementById("quotePreview");
-
-  // Keep default package items while showing loading
-  resultDiv.innerHTML = `
-    <h3>Included in HiQ Essential</h3>
-    <p>HiQ Central Hub</p>
-    <p>Internet Router</p>
-    <p>Echo Dot Voice Assistant</p>
-    <p>HarmoniQ LIV App</p>
-    <p>Trial Access to QARA (AI assistant)</p>
-    <p>Installation – Free</p>
-    <p style="font-style:italic;">Processing your request…</p>
-  `;
-
   try {
-    const response = await fetch("https://macapellan.app.n8n.cloud/webhook-test/ef1bcf20-e87f-4905-9921-968d45d4e639", {
+    const response = await fetch(webhookURL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData)
     });
-
-    if (!response.ok) throw new Error("Network response not OK");
-
     const data = await response.json();
-
-    // Append AI result below default items
-    resultDiv.innerHTML += `
-      <h3>AI Result</h3>
-      <p>${data.aiResult}</p>
-    `;
-
-  } catch (error) {
-    console.error("Error submitting form:", error);
-    resultDiv.innerHTML += "<p style='color:red;'>Error submitting form. Check console for details.</p>";
+    document.getElementById("aiResult").innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+    alert("Form submitted successfully!");
+  } catch (err) {
+    console.error("Error:", err);
+    alert("Error submitting form. Check console for details.");
   }
 });
 </script>
+
 </body>
 </html>
