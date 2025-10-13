@@ -1,69 +1,189 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>HiQ Essentials Test Form</title>
-</head>
-<body>
-  <h2>HiQ Essentials Form</h2>
-  <form id="hiqForm">
-    <label>Name:</label>
-    <input type="text" name="name" required><br><br>
-
-    <label>Email:</label>
-    <input type="email" name="email" required><br><br>
-
-    <label>Contact (optional):</label>
-    <input type="text" name="contact"><br><br>
-
-    <label>Package:</label>
-    <select name="package">
-      <option value="essential" selected>Essential</option>
-    </select><br><br>
-
-    <label>Security Essential:</label>
-    <select name="security">
-      <option value="smart lock">Smart Lock</option>
-      <option value="smart sensor">Smart Sensor</option>
-    </select><br><br>
-
-    <label>Power Control:</label>
-    <select name="power">
-      <option value="led bulb">LED Bulb</option>
-      <option value="smart plug">Smart Plug</option>
-      <option value="weather control">Weather Control</option>
-    </select><br><br>
-
-    <button type="submit">Submit</button>
-  </form>
-
-  <p id="result"></p>
-
-  <script>
-    const form = document.getElementById('hiqForm');
-    const result = document.getElementById('result');
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      result.textContent = 'Submitting...';
-      
-      const data = Object.fromEntries(new FormData(form));
-
-      const webhookURL = "YOUR_N8N_WEBHOOK_URL_HERE"; // replace this
-
-      const response = await fetch(webhookURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-
-      if (response.ok) {
-        result.textContent = "Submitted successfully!";
-        form.reset();
-      } else {
-        result.textContent = "Error submitting form.";
+  <head>
+    <meta charset="utf-8" />
+    <title>HiQ Test Form</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #5d9cec, #b8e0f9);
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
-    });
-  </script>
-</body>
 
+      .glass-card {
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(15px) saturate(150%);
+        -webkit-backdrop-filter: blur(15px) saturate(150%);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 20px;
+        padding: 30px 40px;
+        width: 400px;
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+      }
+
+      h1 {
+        text-align: center;
+        color: #fff;
+        margin-bottom: 25px;
+        text-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      }
+
+      label {
+        display: block;
+        margin-top: 15px;
+        font-weight: bold;
+        color: #ffffffcc;
+      }
+
+      input, select, textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        border: none;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+        transition: background 0.2s, transform 0.1s;
+      }
+
+      input:focus, select:focus, textarea:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 1);
+        transform: scale(1.02);
+      }
+
+      .inline-group {
+        display: flex;
+        gap: 8px;
+      }
+
+      button {
+        margin-top: 25px;
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        background: linear-gradient(90deg, #007bff, #00c6ff);
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background 0.3s, transform 0.1s;
+      }
+
+      button:hover {
+        background: linear-gradient(90deg, #005ce6, #00a6e6);
+        transform: scale(1.03);
+      }
+
+      textarea {
+        height: 100px;
+        resize: none;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="glass-card">
+      <h1>HiQ Test Form</h1>
+
+      <form id="hiq-form" action="https://YOUR-N8N-WEBHOOK-URL" method="post">
+        <label>Name</label>
+        <input type="text" name="name" required />
+
+        <label>Email</label>
+        <input type="email" name="email" required />
+
+        <label>Contact (optional)</label>
+        <input type="text" name="contact" />
+
+        <label>Package</label>
+        <select name="package">
+          <option value="Essential">Essential</option>
+        </select>
+
+        <label>Security Essentials</label>
+        <div class="inline-group">
+          <select name="security_item">
+            <option value="">Select one...</option>
+            <option value="HiQ Smart Lock">HiQ Smart Lock</option>
+            <option value="HiQ Motion Sensor">HiQ Motion Sensor</option>
+          </select>
+          <select name="security_qty" id="security_qty">
+            <option value="1">Qty 1</option>
+            <option value="2">Qty 2</option>
+            <option value="3">Qty 3</option>
+            <option value="4">Qty 4</option>
+            <option value="5">Qty 5</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        <input type="number" id="security_qty_custom" name="security_qty_custom" placeholder="Enter custom qty" style="display:none; margin-top:5px;" min="1" />
+
+        <label>Power Control Essentials</label>
+        <div class="inline-group">
+          <select name="power_item">
+            <option value="">Select one...</option>
+            <option value="HiQ Smart Plug">HiQ Smart Plug</option>
+            <option value="HiQ Smart Weather Control">HiQ Smart Weather Control</option>
+            <option value="HiQ Smart LED Bulb">HiQ Smart LED Bulb</option>
+          </select>
+          <select name="power_qty" id="power_qty">
+            <option value="1">Qty 1</option>
+            <option value="2">Qty 2</option>
+            <option value="3">Qty 3</option>
+            <option value="4">Qty 4</option>
+            <option value="5">Qty 5</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        <input type="number" id="power_qty_custom" name="power_qty_custom" placeholder="Enter custom qty" style="display:none; margin-top:5px;" min="1" />
+
+        <button type="submit">Submit</button>
+
+        <label>Quote Preview</label>
+        <textarea id="quote-output" placeholder="Your quote will appear here..." readonly></textarea>
+      </form>
+    </div>
+
+    <script>
+      const form = document.getElementById('hiq-form');
+      const output = document.getElementById('quote-output');
+
+      // Show custom qty input when "Custom" is chosen
+      const handleQtySelect = (selectId, inputId) => {
+        const select = document.getElementById(selectId);
+        const input = document.getElementById(inputId);
+        select.addEventListener('change', () => {
+          if (select.value === 'custom') {
+            input.style.display = 'block';
+            input.required = true;
+          } else {
+            input.style.display = 'none';
+            input.required = false;
+            input.value = '';
+          }
+        });
+      };
+
+      handleQtySelect('security_qty', 'security_qty_custom');
+      handleQtySelect('power_qty', 'power_qty_custom');
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: formData
+        });
+        const result = await response.text();
+        output.value = result;
+      });
+    </script>
+  </body>
 </html>
