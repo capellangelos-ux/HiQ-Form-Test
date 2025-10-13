@@ -5,202 +5,216 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>HiQ Test Form</title>
 <style>
-  body {
-    font-family: "Segoe UI", sans-serif;
-    background: linear-gradient(135deg, #0a0f1f, #1a2740);
-    color: #fff;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-    backdrop-filter: blur(10px);
-  }
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #0a0f1f, #1a2740);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  backdrop-filter: blur(10px);
+}
 
-  .glass {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 30px;
-    width: 90%;
-    max-width: 600px;
-    margin-bottom: 20px;
-  }
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 30px;
+  width: 90%;
+  max-width: 600px;
+  margin-bottom: 20px;
+}
 
-  h1 {
-    text-align: center;
-    color: #80e0ff;
-    margin-bottom: 10px;
-  }
+h1 {
+  text-align: center;
+  color: #80e0ff;
+  margin-bottom: 10px;
+}
 
-  label {
-    display: block;
-    margin-top: 10px;
-    font-weight: 500;
-  }
+h3.section-title {
+  text-align: center;
+  margin-bottom: 10px;
+}
 
-  input, select {
-    width: 100%;
-    padding: 8px;
-    border-radius: 6px;
-    border: none;
-    margin-top: 4px;
-    margin-bottom: 10px;
-  }
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 500;
+}
 
-  button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    background-color: #80e0ff;
-    color: #0a0f1f;
-    font-weight: 700;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
+input, select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  margin-top: 4px;
+  margin-bottom: 10px;
+}
 
-  button:hover {
-    background-color: #00b3ff;
-  }
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background-color: #80e0ff;
+  color: #0a0f1f;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
 
-  #quotePreview {
-    margin-top: 20px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-  }
+button:hover {
+  background-color: #00b3ff;
+}
 
-  .section-block {
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.08);
-  }
+#quotePreview {
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
+
+.section-block {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+}
 </style>
 </head>
 <body>
-  <div class="glass">
-    <h1>HiQ Test Form</h1>
-    <form id="hiqForm">
-      <label for="name">Name</label>
-      <input type="text" id="name" name="name" required />
+<div class="glass">
+<h1>HiQ Test Form</h1>
+<form id="hiqForm">
+<label for="name">Name</label>
+<input type="text" id="name" name="name" required />
 
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" required />
+<label for="email">Email</label>
+<input type="email" id="email" name="email" required />
 
-      <label for="contact">Contact</label>
-      <input type="text" id="contact" name="contact" placeholder="Optional" />
+<label for="contact">Contact</label>
+<input type="text" id="contact" name="contact" placeholder="Optional" />
 
-      <label for="package">Package</label>
-      <select id="package" name="package">
-        <option value="Essential">Essential</option>
-      </select>
+<label for="package">Package</label>
+<select id="package" name="package">
+<option value="Essential">Essential</option>
+</select>
 
-      <div class="section-block">
-        <h3>HiQ Security Essentials</h3>
-        <label>Security Device 1</label>
-        <select id="securityEssential1">
-          <option value="">Select Option</option>
-          <option>HiQ Smart Door Lock</option>
-          <option>HiQ Motion Sensor</option>
-        </select>
-        <select id="securityQty1">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="custom">Custom</option>
-        </select>
+<div class="section-block">
+<h3 class="section-title">HiQ Security Essentials</h3>
 
-        <label>HiQ Security Essentials 2</label>
-        <select id="securityEssential2">
-          <option value="">Select Option</option>
-          <option>HiQ Smart Door Lock</option>
-          <option>HiQ Motion Sensor</option>
-        </select>
-        <select id="securityQty2">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="custom">Custom</option>
-        </select>
-      </div>
+<label>Security Device 1</label>
+<select id="securityEssential1">
+<option value="">Select Option</option>
+<option>Option 1</option>
+<option>Option 2</option>
+<option>Option 3</option>
+</select>
+<select id="securityQty1">
+<option value="">Select Quantity</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="custom">Custom</option>
+</select>
 
-      <div class="section-block">
-        <h3>HiQ Power Control Essentials</h3>
-        <label>Power Device 1</label>
-        <select id="powerEssential1">
-          <option value="">Select Option</option>
-          <option>HiQ Smart LED Bulb</option>
-          <option>HiQ Smart Plug</option>
-          <option>HiQ Smart Weather Control</option>
-        </select>
-        <select id="powerQty1">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="custom">Custom</option>
-        </select>
+<label>Security Device 2</label>
+<select id="securityEssential2">
+<option value="">Select Option</option>
+<option>Option 1</option>
+<option>Option 2</option>
+<option>Option 3</option>
+</select>
+<select id="securityQty2">
+<option value="">Select Quantity</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="custom">Custom</option>
+</select>
+</div>
 
-        <label>HiQ Power Control Essentials 2</label>
-        <select id="powerEssential2">
-          <option value="">Select Option</option>
-          <option>HiQ Smart LED Bulb</option>
-          <option>HiQ Smart Plug</option>
-          <option>HiQ Smart Weather Control</option>
-        </select>
-        <select id="powerQty2">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="custom">Custom</option>
-        </select>
+<div class="section-block">
+<h3 class="section-title">HiQ Power Control Essentials</h3>
 
-        <label>HiQ Power Control Essentials 3</label>
-        <select id="powerEssential3">
-          <option value="">Select Option</option>
-          <option>HiQ Smart LED Bulb</option>
-          <option>HiQ Smart Plug</option>
-          <option>HiQ Smart Weather Control</option>
-        </select>
-        <select id="powerQty3">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="custom">Custom</option>
-        </select>
-      </div>
+<label>Power Device 1</label>
+<select id="powerEssential1">
+<option value="">Select Option</option>
+<option>Option 1</option>
+<option>Option 2</option>
+<option>Option 3</option>
+</select>
+<select id="powerQty1">
+<option value="">Select Quantity</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="custom">Custom</option>
+</select>
 
-      <button type="submit">Submit</button>
-    </form>
+<label>Power Device 2</label>
+<select id="powerEssential2">
+<option value="">Select Option</option>
+<option>Option 1</option>
+<option>Option 2</option>
+<option>Option 3</option>
+</select>
+<select id="powerQty2">
+<option value="">Select Quantity</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="custom">Custom</option>
+</select>
 
-    <div id="quotePreview">
-      <h3>Included in HiQ Essential</h3>
-      <p>HiQ Central Hub </p>
-      <p>Internet Router </p>
-      <p>Echo Dot Voice Assistant </p>
-      <p>HarmoniQ LIV App </p>
-      <p>Trial Access to QARA (AI assistant)</p>
-      <p>Installation – Free </p>
-    </div>
-  </div>
+<label>Power Device 3</label>
+<select id="powerEssential3">
+<option value="">Select Option</option>
+<option>Option 1</option>
+<option>Option 2</option>
+<option>Option 3</option>
+</select>
+<select id="powerQty3">
+<option value="">Select Quantity</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="custom">Custom</option>
+</select>
+</div>
+
+<button type="submit">Submit</button>
+</form>
+
+<div id="quotePreview">
+<h3>Included in HiQ Essential</h3>
+<p>HiQ Central Hub </p>
+<p>Internet Router </p>
+<p>Echo Dot Voice Assistant </p>
+<p>HarmoniQ LIV App </p>
+<p>Trial Access to QARA (AI assistant)</p>
+<p>Installation – Free </p>
+</div>
+</div>
 
 <script>
-document.getElementById("hiqForm").addEventListener("submit", function(e) {
+document.getElementById("hiqForm").addEventListener("submit", async function(e) {
   e.preventDefault();
 
   const formData = {
@@ -222,19 +236,41 @@ document.getElementById("hiqForm").addEventListener("submit", function(e) {
     powerQty3: document.getElementById("powerQty3").value
   };
 
-  fetch("https://macapellan.app.n8n.cloud/webhook-test/ef1bcf20-e87f-4905-9921-968d45d4e639", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(formData)
-  })
-  .then(response => {
+  const resultDiv = document.getElementById("quotePreview");
+
+  // Keep default package items while showing loading
+  resultDiv.innerHTML = `
+    <h3>Included in HiQ Essential</h3>
+    <p>HiQ Central Hub</p>
+    <p>Internet Router</p>
+    <p>Echo Dot Voice Assistant</p>
+    <p>HarmoniQ LIV App</p>
+    <p>Trial Access to QARA (AI assistant)</p>
+    <p>Installation – Free</p>
+    <p style="font-style:italic;">Processing your request…</p>
+  `;
+
+  try {
+    const response = await fetch("https://macapellan.app.n8n.cloud/webhook-test/ef1bcf20-e87f-4905-9921-968d45d4e639", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
+    });
+
     if (!response.ok) throw new Error("Network response not OK");
-    alert("Form submitted successfully!");
-  })
-  .catch(error => {
+
+    const data = await response.json();
+
+    // Append AI result below default items
+    resultDiv.innerHTML += `
+      <h3>AI Result</h3>
+      <p>${data.aiResult}</p>
+    `;
+
+  } catch (error) {
     console.error("Error submitting form:", error);
-    alert("Error submitting form. Check console for details.");
-  });
+    resultDiv.innerHTML += "<p style='color:red;'>Error submitting form. Check console for details.</p>";
+  }
 });
 </script>
 </body>
