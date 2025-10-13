@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HiQ Essentials Test Form</title>
+</head>
+<body>
+  <h2>HiQ Essentials Form</h2>
+  <form id="hiqForm">
+    <label>Name:</label>
+    <input type="text" name="name" required><br><br>
+
+    <label>Email:</label>
+    <input type="email" name="email" required><br><br>
+
+    <label>Contact (optional):</label>
+    <input type="text" name="contact"><br><br>
+
+    <label>Package:</label>
+    <select name="package">
+      <option value="essential" selected>Essential</option>
+    </select><br><br>
+
+    <label>Security Essential:</label>
+    <select name="security">
+      <option value="smart lock">Smart Lock</option>
+      <option value="smart sensor">Smart Sensor</option>
+    </select><br><br>
+
+    <label>Power Control:</label>
+    <select name="power">
+      <option value="led bulb">LED Bulb</option>
+      <option value="smart plug">Smart Plug</option>
+      <option value="weather control">Weather Control</option>
+    </select><br><br>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="result"></p>
+
+  <script>
+    const form = document.getElementById('hiqForm');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      result.textContent = 'Submitting...';
+      
+      const data = Object.fromEntries(new FormData(form));
+
+      const webhookURL = "YOUR_N8N_WEBHOOK_URL_HERE"; // replace this
+
+      const response = await fetch(webhookURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        result.textContent = "Submitted successfully!";
+        form.reset();
+      } else {
+        result.textContent = "Error submitting form.";
+      }
+    });
+  </script>
+</body>
+</html>
