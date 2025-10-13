@@ -1,189 +1,240 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>HiQ Test Form</title>
-    <style>
-      body {
-        font-family: 'Segoe UI', sans-serif;
-        background: linear-gradient(135deg, #5d9cec, #b8e0f9);
-        height: 100vh;
-        margin: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HiQ Test Form</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #101010, #1c1c1c);
+      font-family: "Inter", sans-serif;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 40px 10px;
+    }
 
-      .glass-card {
-        background: rgba(255, 255, 255, 0.25);
-        backdrop-filter: blur(15px) saturate(150%);
-        -webkit-backdrop-filter: blur(15px) saturate(150%);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 20px;
-        padding: 30px 40px;
-        width: 400px;
-        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
-      }
+    .glass-container {
+      backdrop-filter: blur(15px) saturate(180%);
+      -webkit-backdrop-filter: blur(15px) saturate(180%);
+      background-color: rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      max-width: 600px;
+      width: 100%;
+      padding: 30px 40px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
 
-      h1 {
-        text-align: center;
-        color: #fff;
-        margin-bottom: 25px;
-        text-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      }
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 28px;
+      color: #00ffc3;
+      text-shadow: 0 0 8px rgba(0, 255, 195, 0.3);
+    }
 
-      label {
-        display: block;
-        margin-top: 15px;
-        font-weight: bold;
-        color: #ffffffcc;
-      }
+    label {
+      display: block;
+      margin: 12px 0 5px;
+      font-weight: bold;
+    }
 
-      input, select, textarea {
-        width: 100%;
-        padding: 10px;
-        margin-top: 6px;
-        border: none;
-        border-radius: 6px;
-        background: rgba(255, 255, 255, 0.8);
-        font-size: 14px;
-        transition: background 0.2s, transform 0.1s;
-      }
+    select, input[type="text"], input[type="email"], input[type="tel"], input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
 
-      input:focus, select:focus, textarea:focus {
-        outline: none;
-        background: rgba(255, 255, 255, 1);
-        transform: scale(1.02);
-      }
+    .section-block {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 15px 20px;
+      margin: 20px 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
 
-      .inline-group {
-        display: flex;
-        gap: 8px;
-      }
+    .qty-pair {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
 
-      button {
-        margin-top: 25px;
-        width: 100%;
-        padding: 12px;
-        border: none;
-        border-radius: 6px;
-        background: linear-gradient(90deg, #007bff, #00c6ff);
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background 0.3s, transform 0.1s;
-      }
+    .qty-pair select, .qty-pair input {
+      flex: 1;
+    }
 
-      button:hover {
-        background: linear-gradient(90deg, #005ce6, #00a6e6);
-        transform: scale(1.03);
-      }
+    button {
+      background: #00ffc3;
+      color: #111;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      width: 100%;
+      cursor: pointer;
+      transition: 0.3s;
+    }
 
-      textarea {
-        height: 100px;
-        resize: none;
-        margin-top: 10px;
-      }
-    </style>
-  </head>
+    button:hover {
+      background: #00d4a0;
+    }
 
-  <body>
-    <div class="glass-card">
-      <h1>HiQ Test Form</h1>
+    .results {
+      margin-top: 30px;
+      padding: 15px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
 
-      <form id="hiq-form" action="https://YOUR-N8N-WEBHOOK-URL" method="post">
-        <label>Name</label>
-        <input type="text" name="name" required />
+    .mandatory {
+      margin-top: 25px;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding-top: 15px;
+    }
 
-        <label>Email</label>
-        <input type="email" name="email" required />
+    .mandatory h3 {
+      color: #00ffc3;
+      margin-bottom: 8px;
+    }
 
-        <label>Contact (optional)</label>
-        <input type="text" name="contact" />
+    .item-line {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
 
-        <label>Package</label>
-        <select name="package">
-          <option value="Essential">Essential</option>
-        </select>
+  </style>
+</head>
+<body>
+  <div class="glass-container">
+    <h1>HiQ Test Form</h1>
 
-        <label>Security Essentials</label>
-        <div class="inline-group">
-          <select name="security_item">
-            <option value="">Select one...</option>
-            <option value="HiQ Smart Lock">HiQ Smart Lock</option>
-            <option value="HiQ Motion Sensor">HiQ Motion Sensor</option>
+    <form id="hiqForm">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="contact">Contact (Optional)</label>
+      <input type="tel" id="contact" name="contact">
+
+      <label for="package">Package</label>
+      <select id="package" name="package">
+        <option>Essential</option>
+      </select>
+
+      <div class="section-block">
+        <h3>HiQ Security Essentials</h3>
+        <div class="qty-pair">
+          <select id="security1">
+            <option value="">Select Item</option>
+            <option>Smart Lock</option>
+            <option>Motion Sensor</option>
           </select>
-          <select name="security_qty" id="security_qty">
-            <option value="1">Qty 1</option>
-            <option value="2">Qty 2</option>
-            <option value="3">Qty 3</option>
-            <option value="4">Qty 4</option>
-            <option value="5">Qty 5</option>
-            <option value="custom">Custom</option>
+          <select id="security1qty">
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            <option value="4">4</option><option value="5">5</option><option value="custom">Custom</option>
           </select>
         </div>
-        <input type="number" id="security_qty_custom" name="security_qty_custom" placeholder="Enter custom qty" style="display:none; margin-top:5px;" min="1" />
-
-        <label>Power Control Essentials</label>
-        <div class="inline-group">
-          <select name="power_item">
-            <option value="">Select one...</option>
-            <option value="HiQ Smart Plug">HiQ Smart Plug</option>
-            <option value="HiQ Smart Weather Control">HiQ Smart Weather Control</option>
-            <option value="HiQ Smart LED Bulb">HiQ Smart LED Bulb</option>
+        <div class="qty-pair">
+          <select id="security2">
+            <option value="">Select Item</option>
+            <option>Smart Lock</option>
+            <option>Motion Sensor</option>
           </select>
-          <select name="power_qty" id="power_qty">
-            <option value="1">Qty 1</option>
-            <option value="2">Qty 2</option>
-            <option value="3">Qty 3</option>
-            <option value="4">Qty 4</option>
-            <option value="5">Qty 5</option>
-            <option value="custom">Custom</option>
+          <select id="security2qty">
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            <option value="4">4</option><option value="5">5</option><option value="custom">Custom</option>
           </select>
         </div>
-        <input type="number" id="power_qty_custom" name="power_qty_custom" placeholder="Enter custom qty" style="display:none; margin-top:5px;" min="1" />
+      </div>
 
-        <button type="submit">Submit</button>
+      <div class="section-block">
+        <h3>HiQ Power Control Essentials</h3>
+        <div class="qty-pair">
+          <select id="power1">
+            <option value="">Select Item</option>
+            <option>LED Bulb</option>
+            <option>Smart Plug</option>
+            <option>AC Controller</option>
+          </select>
+          <select id="power1qty">
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            <option value="4">4</option><option value="5">5</option><option value="custom">Custom</option>
+          </select>
+        </div>
+        <div class="qty-pair">
+          <select id="power2">
+            <option value="">Select Item</option>
+            <option>LED Bulb</option>
+            <option>Smart Plug</option>
+            <option>AC Controller</option>
+          </select>
+          <select id="power2qty">
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            <option value="4">4</option><option value="5">5</option><option value="custom">Custom</option>
+          </select>
+        </div>
+        <div class="qty-pair">
+          <select id="power3">
+            <option value="">Select Item</option>
+            <option>LED Bulb</option>
+            <option>Smart Plug</option>
+            <option>AC Controller</option>
+          </select>
+          <select id="power3qty">
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            <option value="4">4</option><option value="5">5</option><option value="custom">Custom</option>
+          </select>
+        </div>
+      </div>
 
-        <label>Quote Preview</label>
-        <textarea id="quote-output" placeholder="Your quote will appear here..." readonly></textarea>
-      </form>
+      <button type="submit">Submit</button>
+    </form>
+
+    <div class="results" id="results">
+      <div class="mandatory">
+        <h3>Included in HiQ Essential (Mandatory)</h3>
+        <div class="item-line">HiQ Central Hub — 1pc — HQSLES03ACCHUBCENT0001/1pc*white</div>
+        <div class="item-line">Internet Router — 1pc — HQSLES03ACCROUTROUT0001/1pc*white</div>
+        <div class="item-line">Echo Dot Voice Assistant & Speaker — 1pc — HQSLES03ACCECHOVOIC0001/1pc*white</div>
+        <div class="item-line">HarmoniQ LIV App — 1pc — HQSISG03APPLIVAPP0001/1pc*white</div>
+        <div class="item-line">Trial Access to QARA (AI assistant)</div>
+        <div class="item-line">Installation — 3 days — HQSLES03SVCINSTINST0000/1pc*white</div>
+      </div>
     </div>
+  </div>
 
-    <script>
-      const form = document.getElementById('hiq-form');
-      const output = document.getElementById('quote-output');
+  <script>
+    const form = document.getElementById('hiqForm');
+    const resultsDiv = document.getElementById('results');
 
-      // Show custom qty input when "Custom" is chosen
-      const handleQtySelect = (selectId, inputId) => {
-        const select = document.getElementById(selectId);
-        const input = document.getElementById(inputId);
-        select.addEventListener('change', () => {
-          if (select.value === 'custom') {
-            input.style.display = 'block';
-            input.required = true;
-          } else {
-            input.style.display = 'none';
-            input.required = false;
-            input.value = '';
-          }
-        });
-      };
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-      handleQtySelect('security_qty', 'security_qty_custom');
-      handleQtySelect('power_qty', 'power_qty_custom');
+      const formData = new FormData(form);
+      const entries = Object.fromEntries(formData.entries());
 
-      form.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const formData = new FormData(form);
-        const response = await fetch(form.action, {
-          method: 'POST',
-          body: formData
-        });
-        const result = await response.text();
-        output.value = result;
+      // Placeholder for Webhook URL (replace this later with n8n endpoint)
+      const webhookURL = "https://YOUR-N8N-WEBHOOK-URL";
+
+      const res = await fetch(webhookURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(entries),
       });
-    </script>
-  </body>
+
+      const data = await res.json().catch(() => ({}));
+
+      resultsDiv.innerHTML += `<p style="margin-top:10px;">Quote Generated:</p><pre>${JSON.stringify(data, null, 2)}</pre>`;
+    });
+  </script>
+</body>
 </html>
