@@ -111,15 +111,12 @@ button:hover {
       <!-- HiQ Security Essentials -->
       <div class="section-block">
         <h3>HiQ Security Essentials</h3>
-
         <div class="device-row">
           <select id="securityEssential1"><option value="">Select Device</option></select>
           <select id="securityDesc1"><option value="">Select Description</option></select>
           <select id="securityQty1">
-            <option value="">Select Quantity</option>
-            <option value="1">1</option><option value="2">2</option>
-            <option value="3">3</option><option value="4">4</option>
-            <option value="5">5</option><option value="custom">Custom</option>
+            <option value="">Qty</option><option>1</option><option>2</option>
+            <option>3</option><option>4</option><option>5</option><option value="custom">Custom</option>
           </select>
           <input class="custom-qty" id="securityCustom1" type="number" min="1" placeholder="Qty">
         </div>
@@ -128,10 +125,8 @@ button:hover {
           <select id="securityEssential2"><option value="">Select Device</option></select>
           <select id="securityDesc2"><option value="">Select Description</option></select>
           <select id="securityQty2">
-            <option value="">Select Quantity</option>
-            <option value="1">1</option><option value="2">2</option>
-            <option value="3">3</option><option value="4">4</option>
-            <option value="5">5</option><option value="custom">Custom</option>
+            <option value="">Qty</option><option>1</option><option>2</option>
+            <option>3</option><option>4</option><option>5</option><option value="custom">Custom</option>
           </select>
           <input class="custom-qty" id="securityCustom2" type="number" min="1" placeholder="Qty">
         </div>
@@ -145,10 +140,8 @@ button:hover {
           <select id="powerEssential1"><option value="">Select Device</option></select>
           <select id="powerDesc1"><option value="">Select Description</option></select>
           <select id="powerQty1">
-            <option value="">Select Quantity</option>
-            <option value="1">1</option><option value="2">2</option>
-            <option value="3">3</option><option value="4">4</option>
-            <option value="5">5</option><option value="custom">Custom</option>
+            <option value="">Qty</option><option>1</option><option>2</option>
+            <option>3</option><option>4</option><option>5</option><option value="custom">Custom</option>
           </select>
           <input class="custom-qty" id="powerCustom1" type="number" min="1" placeholder="Qty">
         </div>
@@ -157,10 +150,8 @@ button:hover {
           <select id="powerEssential2"><option value="">Select Device</option></select>
           <select id="powerDesc2"><option value="">Select Description</option></select>
           <select id="powerQty2">
-            <option value="">Select Quantity</option>
-            <option value="1">1</option><option value="2">2</option>
-            <option value="3">3</option><option value="4">4</option>
-            <option value="5">5</option><option value="custom">Custom</option>
+            <option value="">Qty</option><option>1</option><option>2</option>
+            <option>3</option><option>4</option><option>5</option><option value="custom">Custom</option>
           </select>
           <input class="custom-qty" id="powerCustom2" type="number" min="1" placeholder="Qty">
         </div>
@@ -169,10 +160,8 @@ button:hover {
           <select id="powerEssential3"><option value="">Select Device</option></select>
           <select id="powerDesc3"><option value="">Select Description</option></select>
           <select id="powerQty3">
-            <option value="">Select Quantity</option>
-            <option value="1">1</option><option value="2">2</option>
-            <option value="3">3</option><option value="4">4</option>
-            <option value="5">5</option><option value="custom">Custom</option>
+            <option value="">Qty</option><option>1</option><option>2</option>
+            <option>3</option><option>4</option><option>5</option><option value="custom">Custom</option>
           </select>
           <input class="custom-qty" id="powerCustom3" type="number" min="1" placeholder="Qty">
         </div>
@@ -202,11 +191,9 @@ button:hover {
 </div>
 
 <script>
-/* ====== CONFIG - your production endpoints ====== */
-const catalogURL = "https://macapellan.app.n8n.cloud/webhook-test/hiq-catalog"; 
+const catalogURL = "https://macapellan.app.n8n.cloud/webhook/hiq-catalog";
 const submitURL  = "https://macapellan.app.n8n.cloud/webhook/ef1bcf20-e87f-4905-9921-968d45d4e639";
 
-/* ====== internal state ====== */
 let devices = [];
 
 const allDeviceSelects = [
@@ -217,35 +204,11 @@ const allDeviceSelects = [
   { deviceId: "powerEssential3", descId: "powerDesc3", qtyId: "powerQty3", customId: "powerCustom3", category: "Power Control" }
 ];
 
-/* ====== load catalog ====== */
 async function loadDevices() {
   try {
-    let res = await fetch(catalogURL, {
-      method: "GET",
-      mode: "cors",
-      headers: { "Accept": "application/json" }
-    });
-
-    // if GET fails (n8n returns 404 or similar), try POST
-    if (!res.ok) {
-      console.warn("GET failed, retrying with POST...");
-      res = await fetch(catalogURL, {
-        method: "POST",
-        mode: "cors",
-        headers: { "Accept": "application/json" }
-      });
-    }
-
-    if (!res.ok) throw new Error(`Catalog fetch failed: ${res.status}`);
-
-    const text = await res.text();
-    try {
-      devices = JSON.parse(text);
-    } catch {
-      console.warn("Non-JSON response, wrapping into array");
-      devices = Array.isArray(text) ? text : [];
-    }
-
+    const res = await fetch(catalogURL);
+    const json = await res.json();
+    devices = Array.isArray(json) ? json : [json];
     populateAllDevices();
   } catch (err) {
     console.error("Error loading catalog:", err);
@@ -259,54 +222,46 @@ function populateAllDevices() {
     select.innerHTML = `<option value="">Select Device</option>`;
 
     const filtered = devices.filter(d => {
-      const pkg = (d.Package || d.package || "").toString();
-      const cat = (d["Subcategory 1 (FUNCTION)"] || d.category || d["Subcategory"] || "").toString();
-      const generic = d["Generic Device Name"] || d.generic || d["Device Group"] || "";
-      return pkg.toLowerCase().includes("essential") && cat.toLowerCase().includes(sel.category.toLowerCase());
+      const banding = (d.Banding || "").toLowerCase();
+      const func = (d["Subcategory 1 (FUNCTION)"] || "").toLowerCase();
+      return banding.includes("essential") && func.includes(sel.category.toLowerCase());
     });
 
-    const uniqueGenerics = [...new Set(filtered.map(d => (d["Generic Device Name"] || d.generic || d["Device Group"] || "").toString()).filter(Boolean))];
-    uniqueGenerics.forEach(g => {
+    const uniqueNames = [...new Set(filtered.map(d => d.Name).filter(Boolean))];
+    uniqueNames.forEach(name => {
       const option = document.createElement("option");
-      option.value = g;
-      option.textContent = g;
+      option.value = name;
+      option.textContent = name;
       select.appendChild(option);
     });
 
     const descSelect = document.getElementById(sel.descId);
-    if (descSelect) descSelect.innerHTML = `<option value="">Select Description</option>`;
+    descSelect.innerHTML = `<option value="">Select Description</option>`;
   });
-
-  updateSummary();
 }
 
-/* ====== cascading description ====== */
 function populateDescription(deviceSelectId, descSelectId, category) {
   const deviceSelect = document.getElementById(deviceSelectId);
   const descSelect = document.getElementById(descSelectId);
-  const selectedGeneric = deviceSelect.value;
+  const selectedName = deviceSelect.value;
 
   const matches = devices.filter(d => {
-    const pkg = (d.Package || d.package || "").toString();
-    const cat = (d["Subcategory 1 (FUNCTION)"] || d.category || "").toString();
-    const gen = (d["Generic Device Name"] || d.generic || "").toString();
-    return pkg.toLowerCase().includes("essential") &&
-           cat.toLowerCase().includes(category.toLowerCase()) &&
-           gen === selectedGeneric;
+    const banding = (d.Banding || "").toLowerCase();
+    const func = (d["Subcategory 1 (FUNCTION)"] || "").toLowerCase();
+    return banding.includes("essential") && func.includes(category.toLowerCase()) && d.Name === selectedName;
   });
 
   descSelect.innerHTML = `<option value="">Select Description</option>`;
   matches.forEach(m => {
-    const deviceName = m["Device Name"] || m.deviceName || m["Description"] || m.description || "";
-    const sku = (m.SKU || m.sku || m["Item Code"] || "").toString();
+    const desc = m.Description || "";
+    const sku = m.SKU || "";
     const option = document.createElement("option");
-    option.value = JSON.stringify({ deviceName, sku });
-    option.textContent = `${deviceName}${sku ? " — " + sku : ""}`;
+    option.value = JSON.stringify({ desc, sku });
+    option.textContent = `${desc}${sku ? " — " + sku : ""}`;
     descSelect.appendChild(option);
   });
 }
 
-/* ====== summary ====== */
 function updateSummary() {
   const summaryDiv = document.getElementById("liveSummary");
   let html = "";
@@ -315,28 +270,24 @@ function updateSummary() {
     const descVal = document.getElementById(sel.descId).value;
     const qtyVal = document.getElementById(sel.qtyId).value;
     const customEl = document.getElementById(sel.customId);
-
-    let qtyFinal = qtyVal;
-    if (qtyVal === "custom") qtyFinal = customEl && customEl.value ? customEl.value : "(custom)";
+    let qtyFinal = qtyVal === "custom" ? customEl.value || "(custom)" : qtyVal;
 
     if (device || descVal || qtyVal) {
-      let deviceLabel = device || "-";
-      let descLabel = "-";
-      let skuLabel = "";
+      let descText = "";
+      let skuText = "";
       if (descVal) {
         try {
           const parsed = JSON.parse(descVal);
-          descLabel = parsed.deviceName || descLabel;
-          skuLabel = parsed.sku ? ` | ${parsed.sku}` : "";
+          descText = parsed.desc || "";
+          skuText = parsed.sku ? ` | ${parsed.sku}` : "";
         } catch {}
       }
-      html += `<p><strong>${deviceLabel}</strong> — ${descLabel}${skuLabel} — Qty: ${qtyFinal}</p>`;
+      html += `<p><strong>${device}</strong> — ${descText}${skuText} — Qty: ${qtyFinal}</p>`;
     }
   });
   summaryDiv.innerHTML = html || "<p>No devices selected</p>";
 }
 
-/* ====== wire events ====== */
 allDeviceSelects.forEach(sel => {
   const deviceEl = document.getElementById(sel.deviceId);
   const descEl = document.getElementById(sel.descId);
@@ -349,23 +300,12 @@ allDeviceSelects.forEach(sel => {
   });
   descEl.addEventListener("change", updateSummary);
   qtyEl.addEventListener("change", () => {
-    if (qtyEl.value === "custom") {
-      customEl.style.display = "block";
-      customEl.focus();
-    } else {
-      customEl.style.display = "none";
-      customEl.value = "";
-    }
+    customEl.style.display = qtyEl.value === "custom" ? "block" : "none";
     updateSummary();
   });
   customEl.addEventListener("input", updateSummary);
 });
 
-/* ====== submit handler ====== */
-document.getElementById("hiqForm").addEventListener("submit", e => {
-  e.preventDefault();
-  submitForm();
-});
 document.getElementById("cartSubmitBtn").addEventListener("click", submitForm);
 
 async function submitForm() {
@@ -375,21 +315,23 @@ async function submitForm() {
     contact: document.getElementById("contact").value,
     package: document.getElementById("package").value,
     devices: allDeviceSelects.map(sel => {
-      const device = document.getElementById(sel.deviceId).value || "";
-      const descRaw = document.getElementById(sel.descId).value || "";
-      let parsed = { deviceName: "", sku: "" };
-      if (descRaw) try { parsed = JSON.parse(descRaw); } catch {}
-      const qtyVal = document.getElementById(sel.qtyId).value || "";
-      const customEl = document.getElementById(sel.customId);
-      const qtyFinal = qtyVal === "custom" ? (customEl.value || null) : qtyVal;
-      return { category: sel.category, generic: device, ...parsed, quantity: qtyFinal };
-    }).filter(d => d.generic || d.deviceName)
+      const device = document.getElementById(sel.deviceId).value;
+      const descRaw = document.getElementById(sel.descId).value;
+      let parsed = {};
+      try { parsed = JSON.parse(descRaw); } catch {}
+      const qty = document.getElementById(sel.qtyId).value;
+      const custom = document.getElementById(sel.customId).value;
+      return {
+        category: sel.category,
+        name: device,
+        description: parsed.desc || "",
+        sku: parsed.sku || "",
+        quantity: qty === "custom" ? custom : qty
+      };
+    }).filter(d => d.name)
   };
 
   try {
-    const btn = document.getElementById("cartSubmitBtn");
-    btn.disabled = true; btn.textContent = "Submitting...";
-
     const res = await fetch(submitURL, {
       method: "POST",
       mode: "cors",
@@ -397,25 +339,16 @@ async function submitForm() {
       body: JSON.stringify(payload)
     });
 
-    const text = await res.text();
-    const data = (() => { try { return JSON.parse(text); } catch { return text; }})();
-    if (!res.ok) throw new Error(data);
-
-    document.getElementById("aiResult").innerHTML = `<pre>${typeof data === "string" ? data : JSON.stringify(data, null, 2)}</pre>`;
+    const data = await res.json();
+    document.getElementById("aiResult").innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
     alert("Form submitted successfully!");
   } catch (err) {
-    console.error("Submission error:", err);
+    console.error("Error submitting form:", err);
     alert("Error submitting form. Check console for details.");
-  } finally {
-    const btn = document.getElementById("cartSubmitBtn");
-    btn.disabled = false; btn.textContent = "Submit";
   }
 }
 
 loadDevices();
 </script>
-  
 </body>
 </html>
-
-
