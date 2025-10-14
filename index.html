@@ -202,8 +202,11 @@ button:hover {
 </div>
 
 <script>
-const catalogURL = "https://macapellan.app.n8n.cloud/webhook/hiq-catalog";
-const submitURL = "https://macapellan.app.n8n.cloud/webhook/ef1bcf20-e87f-4905-9921-968d45d4e639";
+/* ====== CONFIG - your production endpoints ====== */
+const catalogURL = "https://macapellan.app.n8n.cloud/webhook/hiq-catalog"; 
+const submitURL  = "https://macapellan.app.n8n.cloud/webhook/ef1bcf20-e87f-4905-9921-968d45d4e639";
+
+/* ====== internal state ====== */
 let devices = [];
 
 const allDeviceSelects = [
@@ -214,11 +217,35 @@ const allDeviceSelects = [
   { deviceId: "powerEssential3", descId: "powerDesc3", qtyId: "powerQty3", customId: "powerCustom3", category: "Power Control" }
 ];
 
+/* ====== load catalog ====== */
 async function loadDevices() {
   try {
-    const res = await fetch(catalogURL, { method: "GET", headers: { "Accept": "application/json" }, mode: "cors" });
-    const raw = await res.json();
-    devices = Array.isArray(raw) ? raw : raw.data || [];
+    let res = await fetch(catalogURL, {
+      method: "GET",
+      mode: "cors",
+      headers: { "Accept": "application/json" }
+    });
+
+    // if GET fails (n8n returns 404 or similar), try POST
+    if (!res.ok) {
+      console.warn("GET failed, retrying with POST...");
+      res = await fetch(catalogURL, {
+        method: "POST",
+        mode: "cors",
+        headers: { "Accept": "application/json" }
+      });
+    }
+
+    if (!res.ok) throw new Error(`Catalog fetch failed: ${res.status}`);
+
+    const text = await res.text();
+    try {
+      devices = JSON.parse(text);
+    } catch {
+      console.warn("Non-JSON response, wrapping into array");
+      devices = Array.isArray(text) ? text : [];
+    }
+
     populateAllDevices();
   } catch (err) {
     console.error("Error loading catalog:", err);
@@ -230,10 +257,164 @@ function populateAllDevices() {
   allDeviceSelects.forEach(sel => {
     const select = document.getElementById(sel.deviceId);
     select.innerHTML = `<option value="">Select Device</option>`;
+
+    const filtered = devices.filter(d => {
+      const pkg = (d.Package || d.package || "").toString();
+      const cat = (d["Subcategory 1 (FUNCTION)"] || d.category || d["Subcategory"] || "").toString();
+      const generic = d["Generic Device Name"] || d.generic || d["Device Group"] || "";
+      return pkg.toLowerCase().includes("essential") && cat.toLowerCase().includes(sel.category.toLowerCase());
+    });
+
+    const uniqueGenerics = [...new Set(filtered.map(d => (d["Generic Device Name"] || d.generic || d["Device Group"] || "").toString()).filter(Boolean))];
+    uniqueGenerics.forEach(g => {
+      const option = document.createElement("option");
+      option.value = g;
+      option.textContent = g;
+      select.appendChild(option);
+    });
+
+    const descSelect = document.getElementById(sel.descId);
+    if (descSelect) descSelect.innerHTML = `<option value="">Select Description</option>`;
   });
+
+  updateSummary();
+}
+
+/* ====== cascading description ====== */
+function populateDescription(deviceSelectId, descSelectId, category) {
+  const deviceSelect = document.getElementById(deviceSelectId);
+  const descSelect = document.getElementById(descSelectId);
+  const selectedGeneric = deviceSelect.value;
+
+  const matches = devices.filter(d => {
+    const pkg = (d.Package || d.package || "").toString();
+    const cat = (d["Subcategory 1 (FUNCTION)"] || d.category || "").toString();
+    const gen = (d["Generic Device Name"] || d.generic || "").toString();
+    return pkg.toLowerCase().includes("essential") &&
+           cat.toLowerCase().includes(category.toLowerCase()) &&
+           gen === selectedGeneric;
+  });
+
+  descSelect.innerHTML = `<option value="">Select Description</option>`;
+  matches.forEach(m => {
+    const deviceName = m["Device Name"] || m.deviceName || m["Description"] || m.description || "";
+    const sku = (m.SKU || m.sku || m["Item Code"] || "").toString();
+    const option = document.createElement("option");
+    option.value = JSON.stringify({ deviceName, sku });
+    option.textContent = `${deviceName}${sku ? " — " + sku : ""}`;
+    descSelect.appendChild(option);
+  });
+}
+
+/* ====== summary ====== */
+function updateSummary() {
+  const summaryDiv = document.getElementById("liveSummary");
+  let html = "";
+  allDeviceSelects.forEach(sel => {
+    const device = document.getElementById(sel.deviceId).value;
+    const descVal = document.getElementById(sel.descId).value;
+    const qtyVal = document.getElementById(sel.qtyId).value;
+    const customEl = document.getElementById(sel.customId);
+
+    let qtyFinal = qtyVal;
+    if (qtyVal === "custom") qtyFinal = customEl && customEl.value ? customEl.value : "(custom)";
+
+    if (device || descVal || qtyVal) {
+      let deviceLabel = device || "-";
+      let descLabel = "-";
+      let skuLabel = "";
+      if (descVal) {
+        try {
+          const parsed = JSON.parse(descVal);
+          descLabel = parsed.deviceName || descLabel;
+          skuLabel = parsed.sku ? ` | ${parsed.sku}` : "";
+        } catch {}
+      }
+      html += `<p><strong>${deviceLabel}</strong> — ${descLabel}${skuLabel} — Qty: ${qtyFinal}</p>`;
+    }
+  });
+  summaryDiv.innerHTML = html || "<p>No devices selected</p>";
+}
+
+/* ====== wire events ====== */
+allDeviceSelects.forEach(sel => {
+  const deviceEl = document.getElementById(sel.deviceId);
+  const descEl = document.getElementById(sel.descId);
+  const qtyEl = document.getElementById(sel.qtyId);
+  const customEl = document.getElementById(sel.customId);
+
+  deviceEl.addEventListener("change", () => {
+    populateDescription(sel.deviceId, sel.descId, sel.category);
+    updateSummary();
+  });
+  descEl.addEventListener("change", updateSummary);
+  qtyEl.addEventListener("change", () => {
+    if (qtyEl.value === "custom") {
+      customEl.style.display = "block";
+      customEl.focus();
+    } else {
+      customEl.style.display = "none";
+      customEl.value = "";
+    }
+    updateSummary();
+  });
+  customEl.addEventListener("input", updateSummary);
+});
+
+/* ====== submit handler ====== */
+document.getElementById("hiqForm").addEventListener("submit", e => {
+  e.preventDefault();
+  submitForm();
+});
+document.getElementById("cartSubmitBtn").addEventListener("click", submitForm);
+
+async function submitForm() {
+  const payload = {
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    contact: document.getElementById("contact").value,
+    package: document.getElementById("package").value,
+    devices: allDeviceSelects.map(sel => {
+      const device = document.getElementById(sel.deviceId).value || "";
+      const descRaw = document.getElementById(sel.descId).value || "";
+      let parsed = { deviceName: "", sku: "" };
+      if (descRaw) try { parsed = JSON.parse(descRaw); } catch {}
+      const qtyVal = document.getElementById(sel.qtyId).value || "";
+      const customEl = document.getElementById(sel.customId);
+      const qtyFinal = qtyVal === "custom" ? (customEl.value || null) : qtyVal;
+      return { category: sel.category, generic: device, ...parsed, quantity: qtyFinal };
+    }).filter(d => d.generic || d.deviceName)
+  };
+
+  try {
+    const btn = document.getElementById("cartSubmitBtn");
+    btn.disabled = true; btn.textContent = "Submitting...";
+
+    const res = await fetch(submitURL, {
+      method: "POST",
+      mode: "cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const text = await res.text();
+    const data = (() => { try { return JSON.parse(text); } catch { return text; }})();
+    if (!res.ok) throw new Error(data);
+
+    document.getElementById("aiResult").innerHTML = `<pre>${typeof data === "string" ? data : JSON.stringify(data, null, 2)}</pre>`;
+    alert("Form submitted successfully!");
+  } catch (err) {
+    console.error("Submission error:", err);
+    alert("Error submitting form. Check console for details.");
+  } finally {
+    const btn = document.getElementById("cartSubmitBtn");
+    btn.disabled = false; btn.textContent = "Submit";
+  }
 }
 
 loadDevices();
 </script>
+  
 </body>
 </html>
+
