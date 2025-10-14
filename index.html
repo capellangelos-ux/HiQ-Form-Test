@@ -1,311 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>HiQ Test Form</title>
-<style>
-body {
-  font-family: "Segoe UI", sans-serif;
-  background: linear-gradient(135deg, #0a0f1f, #1a2740);
-  color: #fff;
-  margin: 0;
-  padding: 0;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Living Form</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #121212, #1e1e1e);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      backdrop-filter: blur(10px);
+    }
 
-.form-container {
-  display: flex;
-  align-items: flex-start;
-  gap: 30px;
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 0 20px;
-}
+    .glass-box {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 20px;
+      width: 420px;
+    }
 
-.hiq-form {
-  flex: 2;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 30px;
-}
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-.section-block h3 {
-  text-align: center;
-  margin-bottom: 10px;
-}
+    label {
+      display: block;
+      margin-top: 10px;
+    }
 
-.checkout-box {
-  flex: 1;
-  position: sticky;
-  top: 20px;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 20px;
-  border-radius: 12px;
-  max-height: calc(100vh - 40px);
-  overflow-y: auto;
-}
+    select, input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: none;
+      border-radius: 8px;
+      outline: none;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+    }
 
-label {
-  display: block;
-  margin-top: 10px;
-  font-weight: 500;
-}
+    .cart {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+    }
 
-input, select {
-  width: 100%;
-  padding: 8px;
-  border-radius: 6px;
-  border: none;
-  margin-top: 4px;
-  margin-bottom: 10px;
-}
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #00bcd4;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
 
-.device-row {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.device-row select {
-  flex: 1;
-}
-
-button {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  background-color: #80e0ff;
-  color: #0a0f1f;
-  font-weight: 700;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-button:hover {
-  background-color: #00b3ff;
-}
-</style>
+    button:hover {
+      background: #0097a7;
+    }
+  </style>
 </head>
 <body>
+  <div class="glass-box">
+    <h2>Smart Living Order</h2>
 
-<div class="form-container">
-  <div class="hiq-form">
-    <h1 style="text-align:center; color:#80e0ff;">HiQ Test Form</h1>
-
-    <form id="hiqForm">
+    <form id="smartForm">
       <label for="name">Name</label>
-      <input type="text" id="name" name="name" required />
+      <input type="text" id="name" required>
 
       <label for="email">Email</label>
-      <input type="email" id="email" name="email" required />
-
-      <label for="contact">Contact</label>
-      <input type="text" id="contact" name="contact" placeholder="Optional" />
+      <input type="email" id="email" required>
 
       <label for="package">Package</label>
-      <select id="package" name="package">
+      <select id="package" required>
+        <option value="">Select package</option>
         <option value="Essential">Essential</option>
+        <option value="Advanced">Advanced</option>
+        <option value="Premium">Premium</option>
       </select>
 
-      <div class="section-block">
-        <h3>HiQ Security Essentials</h3>
-        <div class="device-row">
-          <select id="securityEssential1"><option value="">Select Device</option></select>
-          <select id="securityDesc1"><option value="">Select Description</option></select>
-          <select id="securityQty1">
-            <option value="">Select Quantity</option>
-            <option value="1">1</option><option value="2">2</option>
-            <option value="3">3</option><option value="4">4</option>
-            <option value="5">5</option><option value="custom">Custom</option>
-          </select>
-        </div>
-        <div class="device-row">
-          <select id="securityEssential2"><option value="">Select Device</option></select>
-          <select id="securityDesc2"><option value="">Select Description</option></select>
-          <select id="securityQty2">
-            <option value="">Select Quantity</option>
-            <option value="1">1</option><option value="2">2</option>
-            <option value="3">3</option><option value="4">4</option>
-            <option value="5">5</option><option value="custom">Custom</option>
-          </select>
-        </div>
-      </div>
+      <label for="category">Category</label>
+      <select id="category" required>
+        <option value="">Select category</option>
+      </select>
 
-      <div class="section-block">
-        <h3>HiQ Power Control Essentials</h3>
-        <div class="device-row">
-          <select id="powerEssential1"><option value="">Select Device</option></select>
-          <select id="powerDesc1"><option value="">Select Description</option></select>
-          <select id="powerQty1">
-            <option value="">Select Quantity</option>
-            <option value="1">1</option><option value="2">2</option>
-            <option value="3">3</option><option value="4">4</option>
-            <option value="5">5</option><option value="custom">Custom</option>
-          </select>
-        </div>
-        <div class="device-row">
-          <select id="powerEssential2"><option value="">Select Device</option></select>
-          <select id="powerDesc2"><option value="">Select Description</option></select>
-          <select id="powerQty2">
-            <option value="">Select Quantity</option>
-            <option value="1">1</option><option value="2">2</option>
-            <option value="3">3</option><option value="4">4</option>
-            <option value="5">5</option><option value="custom">Custom</option>
-          </select>
-        </div>
-        <div class="device-row">
-          <select id="powerEssential3"><option value="">Select Device</option></select>
-          <select id="powerDesc3"><option value="">Select Description</option></select>
-          <select id="powerQty3">
-            <option value="">Select Quantity</option>
-            <option value="1">1</option><option value="2">2</option>
-            <option value="3">3</option><option value="4">4</option>
-            <option value="5">5</option><option value="custom">Custom</option>
-          </select>
-        </div>
-      </div>
+      <label for="item">Item</label>
+      <select id="item" required>
+        <option value="">Select item</option>
+      </select>
 
-      <button type="submit">Submit</button>
+      <label for="quantity">Quantity</label>
+      <select id="quantity" required>
+        <option value="">Select quantity</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="custom">Custom</option>
+      </select>
     </form>
+
+    <div class="cart" id="cart">
+      <h3>Cart</h3>
+      <ul id="cartList"></ul>
+      <button id="submitBtn">Submit Order</button>
+    </div>
   </div>
 
-  <div class="checkout-box" id="quotePreview">
-    <h3>Included in HiQ Essential</h3>
-    <p>HiQ Central Hub</p>
-    <p>Internet Router</p>
-    <p>Echo Dot Voice Assistant</p>
-    <p>HarmoniQ LIV App</p>
-    <p>Trial Access to QARA (AI assistant)</p>
-    <p>Installation – Free</p>
+  <script>
+    const catalogURL = "https://macapellan.app.n8n.cloud/webhook/hiq-catalog";
+    const submitURL = "https://macapellan.app.n8n.cloud/webhook/ef1bcf20-e87f-4905-9921-968d45d4e639";
 
-    <h3>Selected Devices</h3>
-    <div id="liveSummary"></div>
+    const categorySelect = document.getElementById("category");
+    const itemSelect = document.getElementById("item");
+    const quantitySelect = document.getElementById("quantity");
+    const cartList = document.getElementById("cartList");
+    const submitBtn = document.getElementById("submitBtn");
 
-    <h3>AI Result</h3>
-    <div id="aiResult"></div>
-  </div>
-</div>
+    let cart = [];
 
-<script>
-// Replace with your actual catalog JSON URL
-const catalogURL = "https://macapellan.app.n8n.cloud/webhook/hiq-catalog";
-// Replace with your n8n webhook URL
-const webhookURL = "https://macapellan.app.n8n.cloud/webhook-test/ef1bcf20-e87f-4905-9921-968d45d4e639";
+    // Fetch categories
+    async function fetchCategories() {
+      const response = await fetch(catalogURL);
+      const data = await response.json();
 
-let devices = [];
-const allDeviceSelects = [
-  { deviceId: "securityEssential1", descId: "securityDesc1", qtyId: "securityQty1", category: "Security" },
-  { deviceId: "securityEssential2", descId: "securityDesc2", qtyId: "securityQty2", category: "Security" },
-  { deviceId: "powerEssential1", descId: "powerDesc1", qtyId: "powerQty1", category: "Power Control" },
-  { deviceId: "powerEssential2", descId: "powerDesc2", qtyId: "powerQty2", category: "Power Control" },
-  { deviceId: "powerEssential3", descId: "powerDesc3", qtyId: "powerQty3", category: "Power Control" }
-];
-
-async function loadDevices() {
-  const res = await fetch(catalogURL);
-  devices = await res.json();
-  populateAllDevices();
-}
-
-function populateAllDevices() {
-  allDeviceSelects.forEach(sel => {
-    const select = document.getElementById(sel.deviceId);
-    select.innerHTML = `<option value="">Select Device</option>`;
-    const filtered = devices.filter(d => d.Package === "Essential" && d["Subcategory 1 (FUNCTION)"] === sel.category);
-    const genericDevices = [...new Set(filtered.map(d => d["Generic Device Name"]))];
-    genericDevices.forEach(d => {
-      const option = document.createElement("option");
-      option.value = d;
-      option.textContent = d;
-      select.appendChild(option);
-    });
-    document.getElementById(sel.descId).innerHTML = `<option value="">Select Description</option>`;
-  });
-  updateSummary();
-}
-
-function populateDescription(deviceSelectId, descSelectId, category) {
-  const deviceSelect = document.getElementById(deviceSelectId);
-  const descSelect = document.getElementById(descSelectId);
-  const selectedDevice = deviceSelect.value;
-  const filtered = devices.filter(d =>
-    d.Package === "Essential" &&
-    d["Subcategory 1 (FUNCTION)"] === category &&
-    d["Generic Device Name"] === selectedDevice
-  );
-  descSelect.innerHTML = `<option value="">Select Description</option>`;
-  filtered.forEach(d => {
-    const option = document.createElement("option");
-    option.value = d["Device Name"];
-    option.textContent = d["Device Name"];
-    descSelect.appendChild(option);
-  });
-}
-
-function updateSummary() {
-  const summaryDiv = document.getElementById("liveSummary");
-  let html = "";
-  allDeviceSelects.forEach(sel => {
-    const device = document.getElementById(sel.deviceId).value;
-    const desc = document.getElementById(sel.descId).value;
-    const qty = document.getElementById(sel.qtyId).value;
-    if(device || desc || qty) {
-      html += `<p>${device ? device : "-"} | ${desc ? desc : "-"} | Qty: ${qty ? qty : "-"}</p>`;
+      const categories = [...new Set(data.map(item => item.category))];
+      categorySelect.innerHTML = '<option value="">Select category</option>';
+      categories.forEach(cat => {
+        const option = document.createElement("option");
+        option.value = cat;
+        option.textContent = cat;
+        categorySelect.appendChild(option);
+      });
     }
-  });
-  summaryDiv.innerHTML = html || "<p>No devices selected</p>";
-}
 
-// Event listeners for cascading descriptions and live summary
-allDeviceSelects.forEach(sel => {
-  const deviceEl = document.getElementById(sel.deviceId);
-  const descEl = document.getElementById(sel.descId);
-  const qtyEl = document.getElementById(sel.qtyId);
+    // Populate items based on category
+    categorySelect.addEventListener("change", async () => {
+      const category = categorySelect.value;
+      const response = await fetch(catalogURL);
+      const data = await response.json();
 
-  deviceEl.addEventListener("change", () => {
-    populateDescription(sel.deviceId, sel.descId, sel.category);
-    updateSummary();
-  });
-  descEl.addEventListener("change", updateSummary);
-  qtyEl.addEventListener("change", updateSummary);
-});
-
-// Load devices on page load
-loadDevices();
-
-// Form submission
-document.getElementById("hiqForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
-
-  const formData = {
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    contact: document.getElementById("contact").value,
-    package: document.getElementById("package").value,
-    devices: allDeviceSelects.map(sel => ({
-      device: document.getElementById(sel.deviceId).value,
-      description: document.getElementById(sel.descId).value,
-      quantity: document.getElementById(sel.qtyId).value
-    }))
-  };
-
-  try {
-    const response = await fetch(webhookURL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData)
+      const filteredItems = data.filter(item => item.category === category);
+      itemSelect.innerHTML = '<option value="">Select item</option>';
+      filteredItems.forEach(i => {
+        const option = document.createElement("option");
+        option.value = i.name;
+        option.textContent = i.name;
+        itemSelect.appendChild(option);
+      });
     });
-    const data = await response.json();
-    document.getElementById("aiResult").innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-    alert("Form submitted successfully!");
-  } catch (err) {
-    console.error("Error:", err);
-    alert("Error submitting form. Check console for details.");
-  }
-});
-</script>
 
+    // Handle custom quantity
+    quantitySelect.addEventListener("change", () => {
+      if (quantitySelect.value === "custom") {
+        const customQty = prompt("Enter custom quantity:");
+        if (customQty && !isNaN(customQty)) {
+          const option = document.createElement("option");
+          option.value = customQty;
+          option.textContent = customQty;
+          option.selected = true;
+        } else {
+          quantitySelect.value = "";
+        }
+      }
+    });
+
+    // Add to cart
+    itemSelect.addEventListener("change", () => {
+      const item = itemSelect.value;
+      const qty = quantitySelect.value || 1;
+      if (item) {
+        cart.push({ item, qty });
+        renderCart();
+      }
+    });
+
+    function renderCart() {
+      cartList.innerHTML = "";
+      cart.forEach(c => {
+        const li = document.createElement("li");
+        li.textContent = `${c.item} x${c.qty}`;
+        cartList.appendChild(li);
+      });
+    }
+
+    // Submit form
+    submitBtn.addEventListener("click", async () => {
+      const payload = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        package: document.getElementById("package").value,
+        cart: cart
+      };
+
+      const res = await fetch(submitURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        alert("Order submitted successfully!");
+        cart = [];
+        renderCart();
+      } else {
+        alert("Error submitting order. Please try again.");
+      }
+    });
+
+    // Initialize
+    fetchCategories();
+  </script>
 </body>
 </html>
-
