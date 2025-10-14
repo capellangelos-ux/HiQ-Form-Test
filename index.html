@@ -210,8 +210,14 @@ const allDeviceSelects = [
     if (!res.ok) throw new Error(`Catalog fetch failed: ${res.status}`);
     const data = await res.json();
 
-    // n8n might wrap rows inside { data: [...] }
-    devices = Array.isArray(data) ? data : data.data || [];
+    // n8n may wrap the actual objects inside { json: {...} }
+    if (Array.isArray(data)) {
+      devices = data.map(d => d.json ? d.json : d);
+    } else if (Array.isArray(data.data)) {
+      devices = data.data.map(d => d.json ? d.json : d);
+    } else {
+      devices = [];
+    }
 
     console.log("Loaded devices:", devices.length, devices);
     populateAllDevices();
@@ -365,4 +371,5 @@ loadDevices();
 </script>
 </body>
 </html>
+
 
