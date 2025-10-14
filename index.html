@@ -1,230 +1,451 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Living Form</title>
-  <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #121212, #1e1e1e);
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      backdrop-filter: blur(10px);
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HiQ Test Form</title>
+<style>
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #0a0f1f, #1a2740);
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
 
-    .glass-box {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 20px;
-      width: 420px;
-    }
+.form-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
 
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+.hiq-form {
+  flex: 2;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 30px;
+}
 
-    label {
-      display: block;
-      margin-top: 10px;
-    }
+.section-block h3 {
+  text-align: center;
+  margin-bottom: 10px;
+}
 
-    select, input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: none;
-      border-radius: 8px;
-      outline: none;
-      background: rgba(255, 255, 255, 0.15);
-      color: white;
-    }
+.checkout-box {
+  flex: 1;
+  position: sticky;
+  top: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 20px;
+  border-radius: 12px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
 
-    .cart {
-      margin-top: 20px;
-      padding: 10px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.1);
-    }
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 500;
+}
 
-    button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 8px;
-      background: #00bcd4;
-      color: #fff;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background 0.3s ease;
-    }
+input, select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  margin-top: 4px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
 
-    button:hover {
-      background: #0097a7;
-    }
-  </style>
+.device-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.device-row select {
+  flex: 1;
+}
+
+.device-row .custom-qty {
+  width: 90px;
+  display: none;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background-color: #80e0ff;
+  color: #0a0f1f;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #00b3ff;
+}
+
+/* responsive */
+@media (max-width: 880px) {
+  .form-container { flex-direction: column; padding: 16px; }
+  .checkout-box { position: static; max-height: none; }
+}
+</style>
 </head>
 <body>
-  <div class="glass-box">
-    <h2>Smart Living Order</h2>
 
-    <form id="smartForm">
+<div class="form-container">
+  <div class="hiq-form">
+    <h1 style="text-align:center; color:#80e0ff;">HiQ Test Form</h1>
+
+    <form id="hiqForm">
       <label for="name">Name</label>
-      <input type="text" id="name" required>
+      <input type="text" id="name" name="name" required />
 
       <label for="email">Email</label>
-      <input type="email" id="email" required>
+      <input type="email" id="email" name="email" required />
+
+      <label for="contact">Contact</label>
+      <input type="text" id="contact" name="contact" placeholder="Optional" />
 
       <label for="package">Package</label>
-      <select id="package" required>
-        <option value="">Select package</option>
+      <select id="package" name="package">
         <option value="Essential">Essential</option>
-        <option value="Advanced">Advanced</option>
-        <option value="Premium">Premium</option>
       </select>
 
-      <label for="category">Category</label>
-      <select id="category" required>
-        <option value="">Select category</option>
-      </select>
+      <div class="section-block">
+        <h3>HiQ Security Essentials</h3>
 
-      <label for="item">Item</label>
-      <select id="item" required>
-        <option value="">Select item</option>
-      </select>
+        <div class="device-row">
+          <select id="securityEssential1"><option value="">Select Device</option></select>
+          <select id="securityDesc1"><option value="">Select Description</option></select>
+          <select id="securityQty1">
+            <option value="">Select Quantity</option>
+            <option value="1">1</option><option value="2">2</option>
+            <option value="3">3</option><option value="4">4</option>
+            <option value="5">5</option><option value="custom">Custom</option>
+          </select>
+          <input class="custom-qty" id="securityCustom1" type="number" min="1" placeholder="Qty">
+        </div>
 
-      <label for="quantity">Quantity</label>
-      <select id="quantity" required>
-        <option value="">Select quantity</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="custom">Custom</option>
-      </select>
+        <div class="device-row">
+          <select id="securityEssential2"><option value="">Select Device</option></select>
+          <select id="securityDesc2"><option value="">Select Description</option></select>
+          <select id="securityQty2">
+            <option value="">Select Quantity</option>
+            <option value="1">1</option><option value="2">2</option>
+            <option value="3">3</option><option value="4">4</option>
+            <option value="5">5</option><option value="custom">Custom</option>
+          </select>
+          <input class="custom-qty" id="securityCustom2" type="number" min="1" placeholder="Qty">
+        </div>
+      </div>
+
+      <div class="section-block">
+        <h3>HiQ Power Control Essentials</h3>
+
+        <div class="device-row">
+          <select id="powerEssential1"><option value="">Select Device</option></select>
+          <select id="powerDesc1"><option value="">Select Description</option></select>
+          <select id="powerQty1">
+            <option value="">Select Quantity</option>
+            <option value="1">1</option><option value="2">2</option>
+            <option value="3">3</option><option value="4">4</option>
+            <option value="5">5</option><option value="custom">Custom</option>
+          </select>
+          <input class="custom-qty" id="powerCustom1" type="number" min="1" placeholder="Qty">
+        </div>
+
+        <div class="device-row">
+          <select id="powerEssential2"><option value="">Select Device</option></select>
+          <select id="powerDesc2"><option value="">Select Description</option></select>
+          <select id="powerQty2">
+            <option value="">Select Quantity</option>
+            <option value="1">1</option><option value="2">2</option>
+            <option value="3">3</option><option value="4">4</option>
+            <option value="5">5</option><option value="custom">Custom</option>
+          </select>
+          <input class="custom-qty" id="powerCustom2" type="number" min="1" placeholder="Qty">
+        </div>
+
+        <div class="device-row">
+          <select id="powerEssential3"><option value="">Select Device</option></select>
+          <select id="powerDesc3"><option value="">Select Description</option></select>
+          <select id="powerQty3">
+            <option value="">Select Quantity</option>
+            <option value="1">1</option><option value="2">2</option>
+            <option value="3">3</option><option value="4">4</option>
+            <option value="5">5</option><option value="custom">Custom</option>
+          </select>
+          <input class="custom-qty" id="powerCustom3" type="number" min="1" placeholder="Qty">
+        </div>
+      </div>
+
+      <!-- keep original submit in form for progressive enhancement but we'll also use cart submit -->
+      <button type="submit" id="formSubmit" style="display:none;">Submit</button>
     </form>
-
-    <div class="cart" id="cart">
-      <h3>Cart</h3>
-      <ul id="cartList"></ul>
-      <button id="submitBtn">Submit Order</button>
-    </div>
   </div>
 
-  <script>
-    const catalogURL = "https://macapellan.app.n8n.cloud/webhook/hiq-catalog";
-    const submitURL = "https://macapellan.app.n8n.cloud/webhook/ef1bcf20-e87f-4905-9921-968d45d4e639";
+  <div class="checkout-box" id="quotePreview">
+    <h3>Included in HiQ Essential</h3>
+    <p>HiQ Central Hub</p>
+    <p>Internet Router</p>
+    <p>Echo Dot Voice Assistant</p>
+    <p>HarmoniQ LIV App</p>
+    <p>Trial Access to QARA (AI assistant)</p>
+    <p>Installation – Free</p>
 
-    const categorySelect = document.getElementById("category");
-    const itemSelect = document.getElementById("item");
-    const quantitySelect = document.getElementById("quantity");
-    const cartList = document.getElementById("cartList");
-    const submitBtn = document.getElementById("submitBtn");
+    <h3>Selected Devices</h3>
+    <div id="liveSummary"><p>No devices selected</p></div>
 
-    let cart = [];
+    <h3>AI Result</h3>
+    <div id="aiResult"></div>
 
-    // Fetch categories
-    async function fetchCategories() {
-      const response = await fetch(catalogURL);
-      const data = await response.json();
+    <button id="cartSubmitBtn">Submit</button>
+  </div>
+</div>
 
-      const categories = [...new Set(data.map(item => item.category))];
-      categorySelect.innerHTML = '<option value="">Select category</option>';
-      categories.forEach(cat => {
-        const option = document.createElement("option");
-        option.value = cat;
-        option.textContent = cat;
-        categorySelect.appendChild(option);
-      });
-    }
+<script>
+/* ====== CONFIG - replace with your production endpoints (you're already on prod) ====== */
+const catalogURL = "https://macapellan.app.n8n.cloud/webhook/hiq-catalog"; // production catalog webhook (GET)
+const submitURL  = "https://macapellan.app.n8n.cloud/webhook/ef1bcf20-e87f-4905-9921-968d45d4e639"; // main workflow (POST)
 
-    // Populate items based on category
-    categorySelect.addEventListener("change", async () => {
-      const category = categorySelect.value;
-      const response = await fetch(catalogURL);
-      const data = await response.json();
+/* ====== internal state ====== */
+let devices = []; // catalog data fetched from catalogURL
 
-      const filteredItems = data.filter(item => item.category === category);
-      itemSelect.innerHTML = '<option value="">Select item</option>';
-      filteredItems.forEach(i => {
-        const option = document.createElement("option");
-        option.value = i.name;
-        option.textContent = i.name;
-        itemSelect.appendChild(option);
-      });
+const allDeviceSelects = [
+  { deviceId: "securityEssential1", descId: "securityDesc1", qtyId: "securityQty1", customId: "securityCustom1", category: "Security" },
+  { deviceId: "securityEssential2", descId: "securityDesc2", qtyId: "securityQty2", customId: "securityCustom2", category: "Security" },
+  { deviceId: "powerEssential1", descId: "powerDesc1", qtyId: "powerQty1", customId: "powerCustom1", category: "Power Control" },
+  { deviceId: "powerEssential2", descId: "powerDesc2", qtyId: "powerQty2", customId: "powerCustom2", category: "Power Control" },
+  { deviceId: "powerEssential3", descId: "powerDesc3", qtyId: "powerQty3", customId: "powerCustom3", category: "Power Control" }
+];
+
+/* ====== load catalog ====== */
+async function loadDevices() {
+  try {
+    const res = await fetch(catalogURL, { method: "GET" });
+    if (!res.ok) throw new Error(`Catalog fetch failed: ${res.status}`);
+    devices = await res.json();
+    populateAllDevices();
+  } catch (err) {
+    console.error("Error loading catalog:", err);
+    alert("Unable to load product catalog. Check console.");
+  }
+}
+
+function populateAllDevices() {
+  allDeviceSelects.forEach(sel => {
+    const select = document.getElementById(sel.deviceId);
+    select.innerHTML = `<option value="">Select Device</option>`;
+    // filter by package & category
+    const filtered = devices.filter(d => {
+      // tolerant checks for matching fields — adapt if your sheet column names differ
+      const pkg = (d.Package || d.package || "").toString();
+      const cat = (d["Subcategory 1 (FUNCTION)"] || d.category || d["Subcategory"] || "").toString();
+      const generic = d["Generic Device Name"] || d.generic || d["Device Group"] || "";
+      return pkg.toLowerCase().includes("essential") && cat.toLowerCase().includes(sel.category.toLowerCase());
     });
 
-    // Handle custom quantity
-    quantitySelect.addEventListener("change", () => {
-      if (quantitySelect.value === "custom") {
-        const customQty = prompt("Enter custom quantity:");
-        if (customQty && !isNaN(customQty)) {
-          const option = document.createElement("option");
-          option.value = customQty;
-          option.textContent = customQty;
-          option.selected = true;
-        } else {
-          quantitySelect.value = "";
+    // build list of unique generic names
+    const genericDevices = [...new Set(filtered.map(d => (d["Generic Device Name"] || d.generic || d["Device Group"] || "").toString()).filter(Boolean))];
+
+    genericDevices.forEach(g => {
+      const option = document.createElement("option");
+      option.value = g;
+      option.textContent = g;
+      select.appendChild(option);
+    });
+
+    // clear desc
+    const descSelect = document.getElementById(sel.descId);
+    if (descSelect) descSelect.innerHTML = `<option value="">Select Description</option>`;
+  });
+
+  updateSummary();
+}
+
+/* ====== populate cascading description ====== */
+function populateDescription(deviceSelectId, descSelectId, category) {
+  const deviceSelect = document.getElementById(deviceSelectId);
+  const descSelect = document.getElementById(descSelectId);
+  if (!deviceSelect || !descSelect) return;
+  const selectedGeneric = deviceSelect.value;
+
+  // find catalog entries that match this generic name & category & Essential package
+  const matches = devices.filter(d => {
+    const pkg = (d.Package || d.package || "").toString();
+    const cat = (d["Subcategory 1 (FUNCTION)"] || d.category || "").toString();
+    const gen = (d["Generic Device Name"] || d.generic || "").toString();
+    return pkg.toLowerCase().includes("essential")
+      && cat.toLowerCase().includes(category.toLowerCase())
+      && gen === selectedGeneric;
+  });
+
+  // populate descriptions (Device Name) — include SKU in value for robust lookup
+  descSelect.innerHTML = `<option value="">Select Description</option>`;
+  matches.forEach(m => {
+    // choose the descriptive label and SKU fields depending on your sheet
+    const deviceName = m["Device Name"] || m.deviceName || m["Description"] || m.description || "";
+    const sku = (m.SKU || m.sku || m["Item Code"] || "").toString();
+    const option = document.createElement("option");
+    option.value = JSON.stringify({ deviceName, sku }); // string-encoded object for later parsing
+    option.textContent = `${deviceName}${sku ? " — " + sku : ""}`;
+    descSelect.appendChild(option);
+  });
+}
+
+/* ====== summary ====== */
+function updateSummary() {
+  const summaryDiv = document.getElementById("liveSummary");
+  let html = "";
+  allDeviceSelects.forEach(sel => {
+    const device = document.getElementById(sel.deviceId).value;
+    const descVal = document.getElementById(sel.descId).value;
+    const qtyVal = document.getElementById(sel.qtyId).value;
+    const customInput = document.getElementById(sel.customId);
+    let qtyFinal = qtyVal;
+    if (qtyVal === "custom") qtyFinal = customInput && customInput.value ? customInput.value : "(custom)";
+    if (device || descVal || qtyVal) {
+      let deviceLabel = device || "-";
+      let descLabel = "-";
+      let skuLabel = "";
+      if (descVal) {
+        try {
+          const parsed = JSON.parse(descVal);
+          descLabel = parsed.deviceName || parsed.description || descLabel;
+          skuLabel = parsed.sku ? ` | ${parsed.sku}` : "";
+        } catch(e) {
+          descLabel = descVal;
         }
       }
-    });
-
-    // Add to cart
-    itemSelect.addEventListener("change", () => {
-      const item = itemSelect.value;
-      const qty = quantitySelect.value || 1;
-      if (item) {
-        cart.push({ item, qty });
-        renderCart();
-      }
-    });
-
-    function renderCart() {
-      cartList.innerHTML = "";
-      cart.forEach(c => {
-        const li = document.createElement("li");
-        li.textContent = `${c.item} x${c.qty}`;
-        cartList.appendChild(li);
-      });
+      html += `<p><strong>${deviceLabel}</strong> — ${descLabel}${skuLabel} — Qty: ${qtyFinal}</p>`;
     }
+  });
+  summaryDiv.innerHTML = html || "<p>No devices selected</p>";
+}
 
-    // Submit form
-    submitBtn.addEventListener("click", async () => {
-      const payload = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        package: document.getElementById("package").value,
-        cart: cart
-      };
+/* ====== wire events ====== */
+allDeviceSelects.forEach(sel => {
+  const deviceEl = document.getElementById(sel.deviceId);
+  const descEl = document.getElementById(sel.descId);
+  const qtyEl = document.getElementById(sel.qtyId);
+  const customEl = document.getElementById(sel.customId);
 
-      const res = await fetch(submitURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
+  // when user picks generic device -> populate descriptions
+  deviceEl.addEventListener("change", () => {
+    populateDescription(sel.deviceId, sel.descId, sel.category);
+    updateSummary();
+  });
 
-      if (res.ok) {
-        alert("Order submitted successfully!");
-        cart = [];
-        renderCart();
-      } else {
-        alert("Error submitting order. Please try again.");
-      }
+  // when description changes -> update summary
+  descEl.addEventListener("change", updateSummary);
+
+  // when qty changes -> show custom input if needed + update summary
+  qtyEl.addEventListener("change", () => {
+    if (qtyEl.value === "custom") {
+      if (customEl) { customEl.style.display = "block"; customEl.focus(); }
+    } else {
+      if (customEl) { customEl.style.display = "none"; customEl.value = ""; }
+    }
+    updateSummary();
+  });
+
+  // custom qty input change listener
+  if (customEl) customEl.addEventListener("input", updateSummary);
+});
+
+/* ====== form submit handling ====== */
+document.getElementById("hiqForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  await submitForm(); // delegate to same submit handler
+});
+
+document.getElementById("cartSubmitBtn").addEventListener("click", async function() {
+  await submitForm();
+});
+
+async function submitForm() {
+  // build devices payload
+  const devicesPayload = allDeviceSelects.map(sel => {
+    const device = document.getElementById(sel.deviceId).value || "";
+    const descRaw = document.getElementById(sel.descId).value || "";
+    let parsedDesc = { deviceName: "", sku: "" };
+    if (descRaw) {
+      try { parsedDesc = JSON.parse(descRaw); } catch(e) { parsedDesc.deviceName = descRaw; }
+    }
+    const qtyVal = document.getElementById(sel.qtyId).value || "";
+    const customEl = document.getElementById(sel.customId);
+    const qtyFinal = qtyVal === "custom" ? (customEl && customEl.value ? Number(customEl.value) : null) : (qtyVal ? Number(qtyVal) : null);
+
+    return {
+      category: sel.category,
+      generic: device || null,
+      deviceName: parsedDesc.deviceName || null,
+      sku: parsedDesc.sku || null,
+      quantity: qtyFinal
+    };
+  }).filter(d => d.generic || d.deviceName); // drop empty rows
+
+  const payload = {
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    contact: document.getElementById("contact").value,
+    package: document.getElementById("package").value,
+    devices: devicesPayload
+  };
+
+  // basic validation
+  if (!payload.name || !payload.email) {
+    alert("Please enter name and email.");
+    return;
+  }
+
+  try {
+    // show submission state
+    const submitBtn = document.getElementById("cartSubmitBtn");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting...";
+
+    const res = await fetch(submitURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
     });
 
-    // Initialize
-    fetchCategories();
-  </script>
+    // try to parse JSON but handle non-JSON gracefully
+    let resData = null;
+    try { resData = await res.json(); } catch(e) { resData = await res.text(); }
+
+    if (!res.ok) {
+      console.error("Submission error:", res.status, resData);
+      alert("Submission failed — check console for details.");
+    } else {
+      // show AI result (if response contains something)
+      document.getElementById("aiResult").innerHTML = `<pre>${typeof resData === "string" ? resData : JSON.stringify(resData, null, 2)}</pre>`;
+      alert("Form submitted successfully!");
+    }
+  } catch (err) {
+    console.error("Submission error:", err);
+    alert("Error submitting form. Check console for details.");
+  } finally {
+    const submitBtn = document.getElementById("cartSubmitBtn");
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit";
+  }
+}
+
+/* initialize */
+loadDevices();
+</script>
+
 </body>
 </html>
