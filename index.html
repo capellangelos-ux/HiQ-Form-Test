@@ -204,11 +204,16 @@ const allDeviceSelects = [
   { deviceId: "powerEssential3", descId: "powerDesc3", qtyId: "powerQty3", customId: "powerCustom3", category: "Power Control" }
 ];
 
-async function loadDevices() {
+ async function loadDevices() {
   try {
-    const res = await fetch(catalogURL);
-    const json = await res.json();
-    devices = Array.isArray(json) ? json : [json];
+    let res = await fetch(catalogURL, { method: "GET", mode: "cors", headers: { "Accept": "application/json" } });
+    if (!res.ok) throw new Error(`Catalog fetch failed: ${res.status}`);
+    const data = await res.json();
+
+    // n8n might wrap rows inside { data: [...] }
+    devices = Array.isArray(data) ? data : data.data || [];
+
+    console.log("Loaded devices:", devices.length, devices);
     populateAllDevices();
   } catch (err) {
     console.error("Error loading catalog:", err);
@@ -221,43 +226,51 @@ function populateAllDevices() {
     const select = document.getElementById(sel.deviceId);
     select.innerHTML = `<option value="">Select Device</option>`;
 
+    // Filter by "Banding" and "Subcategory 1 (FUNCTION)"
     const filtered = devices.filter(d => {
-      const banding = (d.Banding || "").toLowerCase();
-      const func = (d["Subcategory 1 (FUNCTION)"] || "").toLowerCase();
-      return banding.includes("essential") && func.includes(sel.category.toLowerCase());
+      const band = (d.Banding || "").toString();
+      const cat = (d["Subcategory 1 (FUNCTION)"] || "").toString();
+      return band.toLowerCase().includes("essential") &&
+             cat.toLowerCase().includes(sel.category.toLowerCase());
     });
 
-    const uniqueNames = [...new Set(filtered.map(d => d.Name).filter(Boolean))];
-    uniqueNames.forEach(name => {
+    // Use "Type" or "Name" as the visible generic group
+    const uniqueGenerics = [...new Set(filtered.map(d => d.Type || d.Name || "").filter(Boolean))];
+    uniqueGenerics.forEach(g => {
       const option = document.createElement("option");
-      option.value = name;
-      option.textContent = name;
+      option.value = g;
+      option.textContent = g;
       select.appendChild(option);
     });
 
     const descSelect = document.getElementById(sel.descId);
-    descSelect.innerHTML = `<option value="">Select Description</option>`;
+    if (descSelect) descSelect.innerHTML = `<option value="">Select Description</option>`;
   });
+
+  updateSummary();
 }
 
 function populateDescription(deviceSelectId, descSelectId, category) {
   const deviceSelect = document.getElementById(deviceSelectId);
   const descSelect = document.getElementById(descSelectId);
-  const selectedName = deviceSelect.value;
+  const selectedGeneric = deviceSelect.value;
 
   const matches = devices.filter(d => {
-    const banding = (d.Banding || "").toLowerCase();
-    const func = (d["Subcategory 1 (FUNCTION)"] || "").toLowerCase();
-    return banding.includes("essential") && func.includes(category.toLowerCase()) && d.Name === selectedName;
+    const band = (d.Banding || "").toString();
+    const cat = (d["Subcategory 1 (FUNCTION)"] || "").toString();
+    const type = (d.Type || d.Name || "").toString();
+    return band.toLowerCase().includes("essential") &&
+           cat.toLowerCase().includes(category.toLowerCase()) &&
+           type === selectedGeneric;
   });
 
   descSelect.innerHTML = `<option value="">Select Description</option>`;
   matches.forEach(m => {
-    const desc = m.Description || "";
-    const sku = m.SKU || "";
+    const deviceName = m.Description || m.Name || "";
+    const sku = (m.SKU || "").toString();
     const option = document.createElement("option");
-    option.value = JSON.stringify({ desc, sku });
-    option.textContent = `${desc}${sku ? " — " + sku : ""}`;
+    option.value = JSON.stringify({ deviceName, sku });
+    option.textContent = `${deviceName}${sku ? " — " + sku : ""}`;
     descSelect.appendChild(option);
   });
 }
@@ -352,3 +365,4 @@ loadDevices();
 </script>
 </body>
 </html>
+
