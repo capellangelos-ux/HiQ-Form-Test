@@ -214,12 +214,12 @@ button:hover {
 </div>
 
 <script>
-/* ====== CONFIG - replace with your production endpoints (you're already on prod) ====== */
-const catalogURL = "https://macapellan.app.n8n.cloud/webhook/hiq-catalog"; // production catalog webhook (GET)
-const submitURL  = "https://macapellan.app.n8n.cloud/webhook/ef1bcf20-e87f-4905-9921-968d45d4e639"; // main workflow (POST)
+/* ====== CONFIG - your production endpoints ====== */
+const catalogURL = "https://macapellan.app.n8n.cloud/webhook/hiq-catalog"; 
+const submitURL  = "https://macapellan.app.n8n.cloud/webhook/ef1bcf20-e87f-4905-9921-968d45d4e639";
 
 /* ====== internal state ====== */
-let devices = []; // catalog data fetched from catalogURL
+let devices = [];
 
 const allDeviceSelects = [
   { deviceId: "securityEssential1", descId: "securityDesc1", qtyId: "securityQty1", customId: "securityCustom1", category: "Security" },
@@ -232,9 +232,32 @@ const allDeviceSelects = [
 /* ====== load catalog ====== */
 async function loadDevices() {
   try {
-    const res = await fetch(catalogURL, { method: "GET" });
+    let res = await fetch(catalogURL, {
+      method: "GET",
+      mode: "cors",
+      headers: { "Accept": "application/json" }
+    });
+
+    // if GET fails (n8n returns 404 or similar), try POST
+    if (!res.ok) {
+      console.warn("GET failed, retrying with POST...");
+      res = await fetch(catalogURL, {
+        method: "POST",
+        mode: "cors",
+        headers: { "Accept": "application/json" }
+      });
+    }
+
     if (!res.ok) throw new Error(`Catalog fetch failed: ${res.status}`);
-    devices = await res.json();
+
+    const text = await res.text();
+    try {
+      devices = JSON.parse(text);
+    } catch {
+      console.warn("Non-JSON response, wrapping into array");
+      devices = Array.isArray(text) ? text : [];
+    }
+
     populateAllDevices();
   } catch (err) {
     console.error("Error loading catalog:", err);
@@ -246,26 +269,22 @@ function populateAllDevices() {
   allDeviceSelects.forEach(sel => {
     const select = document.getElementById(sel.deviceId);
     select.innerHTML = `<option value="">Select Device</option>`;
-    // filter by package & category
+
     const filtered = devices.filter(d => {
-      // tolerant checks for matching fields — adapt if your sheet column names differ
       const pkg = (d.Package || d.package || "").toString();
       const cat = (d["Subcategory 1 (FUNCTION)"] || d.category || d["Subcategory"] || "").toString();
       const generic = d["Generic Device Name"] || d.generic || d["Device Group"] || "";
       return pkg.toLowerCase().includes("essential") && cat.toLowerCase().includes(sel.category.toLowerCase());
     });
 
-    // build list of unique generic names
-    const genericDevices = [...new Set(filtered.map(d => (d["Generic Device Name"] || d.generic || d["Device Group"] || "").toString()).filter(Boolean))];
-
-    genericDevices.forEach(g => {
+    const uniqueGenerics = [...new Set(filtered.map(d => (d["Generic Device Name"] || d.generic || d["Device Group"] || "").toString()).filter(Boolean))];
+    uniqueGenerics.forEach(g => {
       const option = document.createElement("option");
       option.value = g;
       option.textContent = g;
       select.appendChild(option);
     });
 
-    // clear desc
     const descSelect = document.getElementById(sel.descId);
     if (descSelect) descSelect.innerHTML = `<option value="">Select Description</option>`;
   });
@@ -273,31 +292,27 @@ function populateAllDevices() {
   updateSummary();
 }
 
-/* ====== populate cascading description ====== */
+/* ====== cascading description ====== */
 function populateDescription(deviceSelectId, descSelectId, category) {
   const deviceSelect = document.getElementById(deviceSelectId);
   const descSelect = document.getElementById(descSelectId);
-  if (!deviceSelect || !descSelect) return;
   const selectedGeneric = deviceSelect.value;
 
-  // find catalog entries that match this generic name & category & Essential package
   const matches = devices.filter(d => {
     const pkg = (d.Package || d.package || "").toString();
     const cat = (d["Subcategory 1 (FUNCTION)"] || d.category || "").toString();
     const gen = (d["Generic Device Name"] || d.generic || "").toString();
-    return pkg.toLowerCase().includes("essential")
-      && cat.toLowerCase().includes(category.toLowerCase())
-      && gen === selectedGeneric;
+    return pkg.toLowerCase().includes("essential") &&
+           cat.toLowerCase().includes(category.toLowerCase()) &&
+           gen === selectedGeneric;
   });
 
-  // populate descriptions (Device Name) — include SKU in value for robust lookup
   descSelect.innerHTML = `<option value="">Select Description</option>`;
   matches.forEach(m => {
-    // choose the descriptive label and SKU fields depending on your sheet
     const deviceName = m["Device Name"] || m.deviceName || m["Description"] || m.description || "";
     const sku = (m.SKU || m.sku || m["Item Code"] || "").toString();
     const option = document.createElement("option");
-    option.value = JSON.stringify({ deviceName, sku }); // string-encoded object for later parsing
+    option.value = JSON.stringify({ deviceName, sku });
     option.textContent = `${deviceName}${sku ? " — " + sku : ""}`;
     descSelect.appendChild(option);
   });
@@ -311,9 +326,11 @@ function updateSummary() {
     const device = document.getElementById(sel.deviceId).value;
     const descVal = document.getElementById(sel.descId).value;
     const qtyVal = document.getElementById(sel.qtyId).value;
-    const customInput = document.getElementById(sel.customId);
+    const customEl = document.getElementById(sel.customId);
+
     let qtyFinal = qtyVal;
-    if (qtyVal === "custom") qtyFinal = customInput && customInput.value ? customInput.value : "(custom)";
+    if (qtyVal === "custom") qtyFinal = customEl && customEl.value ? customEl.value : "(custom)";
+
     if (device || descVal || qtyVal) {
       let deviceLabel = device || "-";
       let descLabel = "-";
@@ -321,11 +338,9 @@ function updateSummary() {
       if (descVal) {
         try {
           const parsed = JSON.parse(descVal);
-          descLabel = parsed.deviceName || parsed.description || descLabel;
+          descLabel = parsed.deviceName || descLabel;
           skuLabel = parsed.sku ? ` | ${parsed.sku}` : "";
-        } catch(e) {
-          descLabel = descVal;
-        }
+        } catch {}
       }
       html += `<p><strong>${deviceLabel}</strong> — ${descLabel}${skuLabel} — Qty: ${qtyFinal}</p>`;
     }
@@ -340,112 +355,78 @@ allDeviceSelects.forEach(sel => {
   const qtyEl = document.getElementById(sel.qtyId);
   const customEl = document.getElementById(sel.customId);
 
-  // when user picks generic device -> populate descriptions
   deviceEl.addEventListener("change", () => {
     populateDescription(sel.deviceId, sel.descId, sel.category);
     updateSummary();
   });
-
-  // when description changes -> update summary
   descEl.addEventListener("change", updateSummary);
-
-  // when qty changes -> show custom input if needed + update summary
   qtyEl.addEventListener("change", () => {
     if (qtyEl.value === "custom") {
-      if (customEl) { customEl.style.display = "block"; customEl.focus(); }
+      customEl.style.display = "block";
+      customEl.focus();
     } else {
-      if (customEl) { customEl.style.display = "none"; customEl.value = ""; }
+      customEl.style.display = "none";
+      customEl.value = "";
     }
     updateSummary();
   });
-
-  // custom qty input change listener
-  if (customEl) customEl.addEventListener("input", updateSummary);
+  customEl.addEventListener("input", updateSummary);
 });
 
-/* ====== form submit handling ====== */
-document.getElementById("hiqForm").addEventListener("submit", async function(e) {
+/* ====== submit handler ====== */
+document.getElementById("hiqForm").addEventListener("submit", e => {
   e.preventDefault();
-  await submitForm(); // delegate to same submit handler
+  submitForm();
 });
-
-document.getElementById("cartSubmitBtn").addEventListener("click", async function() {
-  await submitForm();
-});
+document.getElementById("cartSubmitBtn").addEventListener("click", submitForm);
 
 async function submitForm() {
-  // build devices payload
-  const devicesPayload = allDeviceSelects.map(sel => {
-    const device = document.getElementById(sel.deviceId).value || "";
-    const descRaw = document.getElementById(sel.descId).value || "";
-    let parsedDesc = { deviceName: "", sku: "" };
-    if (descRaw) {
-      try { parsedDesc = JSON.parse(descRaw); } catch(e) { parsedDesc.deviceName = descRaw; }
-    }
-    const qtyVal = document.getElementById(sel.qtyId).value || "";
-    const customEl = document.getElementById(sel.customId);
-    const qtyFinal = qtyVal === "custom" ? (customEl && customEl.value ? Number(customEl.value) : null) : (qtyVal ? Number(qtyVal) : null);
-
-    return {
-      category: sel.category,
-      generic: device || null,
-      deviceName: parsedDesc.deviceName || null,
-      sku: parsedDesc.sku || null,
-      quantity: qtyFinal
-    };
-  }).filter(d => d.generic || d.deviceName); // drop empty rows
-
   const payload = {
     name: document.getElementById("name").value,
     email: document.getElementById("email").value,
     contact: document.getElementById("contact").value,
     package: document.getElementById("package").value,
-    devices: devicesPayload
+    devices: allDeviceSelects.map(sel => {
+      const device = document.getElementById(sel.deviceId).value || "";
+      const descRaw = document.getElementById(sel.descId).value || "";
+      let parsed = { deviceName: "", sku: "" };
+      if (descRaw) try { parsed = JSON.parse(descRaw); } catch {}
+      const qtyVal = document.getElementById(sel.qtyId).value || "";
+      const customEl = document.getElementById(sel.customId);
+      const qtyFinal = qtyVal === "custom" ? (customEl.value || null) : qtyVal;
+      return { category: sel.category, generic: device, ...parsed, quantity: qtyFinal };
+    }).filter(d => d.generic || d.deviceName)
   };
 
-  // basic validation
-  if (!payload.name || !payload.email) {
-    alert("Please enter name and email.");
-    return;
-  }
-
   try {
-    // show submission state
-    const submitBtn = document.getElementById("cartSubmitBtn");
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Submitting...";
+    const btn = document.getElementById("cartSubmitBtn");
+    btn.disabled = true; btn.textContent = "Submitting...";
 
     const res = await fetch(submitURL, {
       method: "POST",
+      mode: "cors",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
 
-    // try to parse JSON but handle non-JSON gracefully
-    let resData = null;
-    try { resData = await res.json(); } catch(e) { resData = await res.text(); }
+    const text = await res.text();
+    const data = (() => { try { return JSON.parse(text); } catch { return text; }})();
+    if (!res.ok) throw new Error(data);
 
-    if (!res.ok) {
-      console.error("Submission error:", res.status, resData);
-      alert("Submission failed — check console for details.");
-    } else {
-      // show AI result (if response contains something)
-      document.getElementById("aiResult").innerHTML = `<pre>${typeof resData === "string" ? resData : JSON.stringify(resData, null, 2)}</pre>`;
-      alert("Form submitted successfully!");
-    }
+    document.getElementById("aiResult").innerHTML = `<pre>${typeof data === "string" ? data : JSON.stringify(data, null, 2)}</pre>`;
+    alert("Form submitted successfully!");
   } catch (err) {
     console.error("Submission error:", err);
     alert("Error submitting form. Check console for details.");
   } finally {
-    const submitBtn = document.getElementById("cartSubmitBtn");
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Submit";
+    const btn = document.getElementById("cartSubmitBtn");
+    btn.disabled = false; btn.textContent = "Submit";
   }
 }
 
-/* initialize */
 loadDevices();
 </script>
-
+  
 </body>
 </html>
+
